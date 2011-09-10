@@ -1,19 +1,8 @@
-!!! 5
+%a{ href: "/logout" } Log Out
 
-%html
+#transcript
+  %p Initial
 
-  %head
-    %title Trampfire
-    %script{ src: 'jquery-1.6.3.min.js' }
-    %script{ src: 'application.js' }
-
-  %body
-    %h1 Trampfire
-    %a{ href: "/logout" } Log Out
-
-    #transcript
-      %p Initial
-
-    %form
-      %input#outgoing{ type: 'textarea' }
-      %input{ type: 'submit' }
+%form
+  %input#outgoing.xlarge{ type: 'textarea' }
+  %input.btn.primary{ type: 'submit' }

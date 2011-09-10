@@ -2,11 +2,13 @@ require 'pry'
 require 'sinatra'
 
 class TrampfireApp < Sinatra::Base
+  set :public, 'public'
+
   get '/' do
     if env['warden'].authenticated?
-      haml :index
+      haml :index, layout: :application
     else
-      haml :login
+      haml :login, layout: :application
     end
   end
 
