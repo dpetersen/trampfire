@@ -9,8 +9,7 @@ class AccessControlApp < Sinatra::Base
       identifier: 'https://www.google.com/accounts/o8/id'
 
   post '/auth/google/callback' do
-    authentication_hash = request.env['omniauth.auth']
-    env['rack.auth'] = authentication_hash
+    env['rack.auth'] = request.env['omniauth.auth']
     env['warden'].authenticate!(:google)
     redirect '/'
   end
