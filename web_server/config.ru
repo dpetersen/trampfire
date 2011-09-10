@@ -1,0 +1,3 @@
+require './trampfire'
+
+run TrampfireApp

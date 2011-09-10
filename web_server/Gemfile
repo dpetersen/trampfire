@@ -2,8 +2,10 @@ source 'http://rubygems.org'
 
 gem 'pry'
 
-gem 'haml'
+gem 'thin'
+gem 'omniauth'
 gem 'sinatra'
+gem 'haml'
 
 gem 'therubyracer'
 gem 'coffee-script'
