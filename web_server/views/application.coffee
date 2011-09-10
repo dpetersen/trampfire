@@ -30,4 +30,3 @@ jQuery ->
 
     catch exception
       alert "Error: #{ exception }"
-
