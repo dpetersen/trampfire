@@ -1,0 +1,9 @@
+source 'http://rubygems.org'
+
+gem 'pry'
+
+gem 'haml'
+gem 'sinatra'
+
+gem 'therubyracer'
+gem 'coffee-script'

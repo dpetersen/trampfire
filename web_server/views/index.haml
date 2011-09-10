@@ -4,6 +4,8 @@
 
   %head
     %title Trampfire
+    %script{ src: 'jquery-1.6.3.min.js' }
+    %script{ src: 'application.js' }
 
   %body
     %h1 Trampfire
@@ -12,6 +14,5 @@
       %p Initial
 
     %form
-      %input{ type: 'textarea' }
+      %input#outgoing{ type: 'textarea' }
       %input{ type: 'submit' }
-
