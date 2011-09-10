@@ -4,6 +4,7 @@ gem 'pry'
 
 gem 'thin'
 gem 'omniauth'
+gem 'warden'
 gem 'sinatra'
 gem 'haml'
 
