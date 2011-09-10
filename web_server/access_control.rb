@@ -12,12 +12,7 @@ class AccessControlApp < Sinatra::Base
     authentication_hash = request.env['omniauth.auth']
     env['rack.auth'] = authentication_hash
     env['warden'].authenticate!(:google)
-
-    if env['warden'].authenticated?
-      redirect '/'
-    else
-      haml :login
-    end
+    redirect '/'
   end
 
   get '/logout' do
