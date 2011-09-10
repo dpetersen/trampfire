@@ -16,7 +16,9 @@ jQuery ->
         $("#transcript").append("<p>Connected...</p>")
 
         $("form").submit ->
-          socket.send $("#outgoing").val()
+          outgoing = $("#outgoing")
+          socket.send outgoing.val()
+          outgoing.val ""
           return false
 
       socket.onmessage = (message) ->
