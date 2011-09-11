@@ -1,8 +1,11 @@
+require 'pry'
+
+require '../database_config'
+
 # This MUST go before sinatra/activerecord is required.  How the fuck
 # that thing actually works as documented... well, it doesn't.
-ENV["DATABASE_URL"] = "mysql2://localhost/trampfire_development"
+ENV["DATABASE_URL"] = DatabaseConfig.connection_string
 
-require 'pry'
 require 'sinatra'
 require 'sinatra/activerecord'
 require './lib/authorization_helpers'

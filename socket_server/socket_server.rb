@@ -7,13 +7,14 @@ require './lib/client'
 
 require 'active_record'
 require '../web_server/models/user'
+require '../database_config'
 
 ActiveRecord::Base.establish_connection(
-  :adapter  => "mysql2",
-  :host     => "localhost",
-  :username => "root",
-  :password => "",
-  :database => "trampfire_development"
+  adapter: DatabaseConfig.adapter,
+  host: DatabaseConfig.host,
+  username: DatabaseConfig.username,
+  password: DatabaseConfig.password,
+  database: DatabaseConfig.database
 )
 
 AllClients = Clients.new
