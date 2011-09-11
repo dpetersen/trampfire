@@ -1,9 +1,9 @@
-Warden::Manager.serialize_into_session do |email|
-  email
+Warden::Manager.serialize_into_session do |user|
+  user.nil? ? nil : user.email
 end
 
 Warden::Manager.serialize_from_session do |email|
-  email
+  User.find_or_create_by_email(email)
 end
 
 Warden::Strategies.add(:google) do
