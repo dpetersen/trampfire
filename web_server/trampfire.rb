@@ -9,7 +9,7 @@ ENV["DATABASE_URL"] = DatabaseConfig.connection_string
 require 'sinatra'
 require 'sinatra/activerecord'
 require './lib/authorization_helpers'
-require './models/user'
+require '../models/user'
 
 class TrampfireApp < Sinatra::Base
   set :public, 'public'

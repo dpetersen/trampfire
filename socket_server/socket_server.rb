@@ -6,7 +6,7 @@ require './lib/clients'
 require './lib/client'
 
 require 'active_record'
-require '../web_server/models/user'
+require '../models/user'
 require '../database_config'
 
 ActiveRecord::Base.establish_connection(
