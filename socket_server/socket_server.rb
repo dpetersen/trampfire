@@ -39,6 +39,7 @@ EventMachine.run do
       puts "Received Message: #{message}"
 
       message = AppManager.process(message)
+      puts "Modified message #{message}"
       AllClients.client_broadcast AllClients.find_by_socket(ws), message
     end
   end
