@@ -6,7 +6,9 @@ jQuery ->
   else
 
     try
-      host = "ws://localhost:8080"
+      # We're big on security around here.  Wait a minute...
+      email = $("#transcript").data("email")
+      host = "ws://localhost:8080?email=#{email}"
       socket = new WebSocket(host)
 
       console.log "Socket Status: #{ socket.readyState }"

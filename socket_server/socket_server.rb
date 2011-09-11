@@ -1,5 +1,6 @@
 require 'eventmachine'
 require 'em-websocket'
+require 'pry'
 
 class Clients
   attr_accessor :clients
@@ -41,10 +42,12 @@ end
 
 class Client
   attr_accessor :nick
-  attr_reader :socket
+  attr_reader :socket, :email
 
   def initialize(socket)
     @socket = socket
+    @email = socket.request["query"]["email"]
+    @nick = email
   end
 
   def send(message)

@@ -1,6 +1,6 @@
 %a{ href: "/logout" } Log Out
 
-#transcript
+#transcript{ data: { email: "#{env['warden'].user}" } }
   %p Initial
 
 %form
