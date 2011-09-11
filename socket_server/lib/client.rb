@@ -1,11 +1,12 @@
 class Client
-  attr_accessor :nick
   attr_reader :socket, :user
 
   def initialize(socket)
     @socket = socket
+
+    # TODO Once we find out how to get the cookie passed, this garbage
+    # has got to go.
     @user = User.find_by_email!(socket.request["query"]["email"])
-    @nick = @user.email
   end
 
   def send(message)
@@ -13,6 +14,6 @@ class Client
   end
 
   def display_name
-    nick || "Anonymous User"
+    @user.display_name
   end
 end

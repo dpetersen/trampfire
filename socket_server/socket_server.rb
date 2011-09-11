@@ -38,10 +38,10 @@ EventMachine.run do
       puts "Received Message: #{message}"
       if message[0] == "/"
         if message =~ /^\/name (.*)$/
-          nick = $1
-          client = AllClients.find_by_socket(ws)
-          AllClients.system_broadcast "#{client.display_name} now known as #{nick}"
-          client.nick = nick
+        #   nick = $1
+        #   client = AllClients.find_by_socket(ws)
+        #   AllClients.system_broadcast "#{client.display_name} now known as #{nick}"
+        #   client.nick = nick
         else
           puts "I don't know how to deal with this command."
         end
