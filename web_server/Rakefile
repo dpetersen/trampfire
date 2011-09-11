@@ -1,0 +1,2 @@
+require './trampfire'
+require 'sinatra/activerecord/rake'

@@ -8,5 +8,9 @@ gem 'warden'
 gem 'sinatra'
 gem 'haml'
 
+gem 'mysql2'
+gem 'activerecord'
+gem 'sinatra-activerecord'
+
 gem 'therubyracer'
 gem 'coffee-script'
