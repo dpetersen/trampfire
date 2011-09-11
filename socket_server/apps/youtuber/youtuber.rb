@@ -1,7 +1,7 @@
 class Youtuber
   def initialize
     @incoming_pipe = open("incoming", "r+")
-    @outgoing_pipe = open("outgoing", "w+")
+    @outgoing_pipe = open("../outgoing", "w+")
 
     wait_for_incoming
   end

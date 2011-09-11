@@ -8,11 +8,10 @@ class AppManager
   def process(message)
     @apps.inject(message) do |message, app_directory|
       app_incoming_pipe = open("apps/#{app_directory}/incoming", "w+")
-      puts app_incoming_pipe.inspect
       app_incoming_pipe.puts message
       app_incoming_pipe.flush
 
-      app_outgoing_pipe = open("apps/#{app_directory}/outgoing", "r+")
+      app_outgoing_pipe = open("apps/outgoing", "r+")
       app_outgoing_pipe.gets
     end
   end
