@@ -5,6 +5,17 @@ require 'em-websocket'
 require './lib/clients'
 require './lib/client'
 
+require 'active_record'
+require '../web_server/models/user'
+
+ActiveRecord::Base.establish_connection(
+  :adapter  => "mysql2",
+  :host     => "localhost",
+  :username => "root",
+  :password => "",
+  :database => "trampfire_development"
+)
+
 AllClients = Clients.new
 EventMachine.run do
 

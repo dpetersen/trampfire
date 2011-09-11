@@ -3,3 +3,5 @@ source 'http://rubygems.org'
 gem 'pry'
 
 gem 'em-websocket'
+gem 'mysql2'
+gem 'activerecord'
