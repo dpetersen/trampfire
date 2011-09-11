@@ -1,11 +1,11 @@
 class Client
   attr_accessor :nick
-  attr_reader :socket, :email
+  attr_reader :socket, :user
 
   def initialize(socket)
     @socket = socket
-    @email = socket.request["query"]["email"]
-    @nick = email
+    @user = User.find_by_email!(socket.request["query"]["email"])
+    @nick = @user.email
   end
 
   def send(message)
