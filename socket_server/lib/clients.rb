@@ -21,17 +21,32 @@ class Clients
     clients.length
   end
 
-def system_broadcast(message)
-  broadcast "System: #{message}"
-end
+  def system_broadcast(message)
+    broadcast system_json(message)
+  end
 
-def client_broadcast(client, message)
-  broadcast "#{client.display_name}: #{message}"
-end
+  def client_broadcast(client, message)
+    broadcast chat_json(client.user, message)
+  end
 
 protected
 
-  def broadcast(message)
-    clients.each { |c| c.send message }
+  def broadcast(json)
+    clients.each { |c| c.send json }
+  end
+
+  def chat_json(user, message)
+    {
+      type: "chat",
+      user: user.email,
+      data: message
+    }.to_json
+  end
+
+  def system_json(message)
+    {
+      type: "system",
+      data: message
+    }.to_json
   end
 end
