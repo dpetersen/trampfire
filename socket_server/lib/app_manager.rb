@@ -10,16 +10,8 @@ class AppManager
 
   def process(message)
     message_json = jsonize_message(message)
-
-    complete_json_message = @apps.inject(message_json) do |passed_message, app_directory|
-      app_pipe = open("#{AppsPath}/#{app_directory}/incoming", "w+")
-      app_pipe.puts passed_message
-      app_pipe.flush
-
-      @incoming_pipe.gets
-    end
-
-    JSON.parse(complete_json_message)["data"]
+    complete_message_json = pass_message_json_through_app_bus(message_json)
+    JSON.parse(complete_message_json)["data"]
   end
 
   def self.process(message)
@@ -36,9 +28,19 @@ protected
   end
 
   def jsonize_message(message)
-    a = {
+    {
       type: "chat",
       data: message
     }.to_json
+  end
+
+  def pass_message_json_through_app_bus(message_json)
+    @apps.inject(message_json) do |passed_message, app_directory|
+      app_pipe = open("#{AppsPath}/#{app_directory}/incoming", "w+")
+      app_pipe.puts passed_message
+      app_pipe.flush
+
+      @incoming_pipe.gets
+    end
   end
 end
