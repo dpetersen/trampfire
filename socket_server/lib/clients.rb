@@ -38,7 +38,7 @@ protected
   def chat_json(user, message)
     {
       type: "chat",
-      user: user.email,
+      user: user.display_name,
       data: message
     }.to_json
   end
