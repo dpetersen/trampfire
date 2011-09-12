@@ -1,18 +1,9 @@
 require '../app_base'
 
 class Youtuber < AppBase
-  def process(message_json)
-    message_hash = deserialize_message_json(message_json)
-    data = message_hash["data"]
-
-    if data =~ /^http:\/\/www\.youtube\.com\/watch\?v\=(.*)$/
-      video_id = $1
-
-      serialize_message_hash(
-        message_hash,
-        embed_html(video_id)
-      )
-    else message_json
+  def modify_message(message)
+    if message =~ /^http:\/\/www\.youtube\.com\/watch\?v\=(.*)$/
+      embed_html($1)
     end
   end
 
