@@ -26,4 +26,11 @@ class TrampfireApp < Sinatra::Base
   get '/application.js' do
     coffee :application
   end
+
+  post '/tags' do
+    when_authenticated do
+      Tag.create(params[:tag])
+      redirect '/'
+    end
+  end
 end

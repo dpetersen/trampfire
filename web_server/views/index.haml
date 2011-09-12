@@ -1,5 +1,9 @@
 %a{ href: "/logout" } Log Out
 
+%form{ action: "/tags", method: "post" }
+  %input{ type: 'text', name: 'tag[name]' }
+  %input.btn.primary{ type: 'submit', value: "Create Tag" }
+
 %ul#tags
   - Tag.all.each do |tag|
     %li= tag.name
