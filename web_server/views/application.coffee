@@ -19,8 +19,9 @@ jQuery ->
 
         $("form").submit ->
           outgoing = $("#outgoing")
-          socket.send outgoing.val()
-          outgoing.val ""
+          message = { type: 'chat', data: outgoing.val() }
+          socket.send JSON.stringify(message)
+          outgoing.val("")
           return false
 
       socket.onmessage = (message) ->
