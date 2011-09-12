@@ -4,7 +4,7 @@ require 'eventmachine'
 require 'em-websocket'
 require './lib/clients'
 require './lib/client'
-require './app_manager'
+require './lib/app_manager'
 
 require 'active_record'
 require '../models/user'
