@@ -8,10 +8,20 @@ class Imager < AppBase
     if data =~ /^http(.*)\.(gif|jpg|jpeg|png)$/
       serialize_message_hash(
         message_hash, 
-        %{<a href="#{data}"><img src="#{data}" alt="#{data}" /></a>}
+        tag_html(data)
       )
     else message_json
     end
+  end
+
+protected
+
+  def tag_html(url)
+    <<-eos
+      <a href="#{url}">
+        <img src="#{url}" alt="#{url}" />
+      </a>
+    eos
   end
 end
 
