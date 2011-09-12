@@ -10,6 +10,7 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require './lib/authorization_helpers'
 require '../models/user'
+require '../models/tag'
 
 class TrampfireApp < Sinatra::Base
   set :public, 'public'
