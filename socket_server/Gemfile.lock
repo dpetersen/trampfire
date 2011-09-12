@@ -23,6 +23,7 @@ GEM
       eventmachine (>= 0.12.9)
     eventmachine (0.12.10)
     i18n (0.6.0)
+    json (1.5.4)
     method_source (0.6.5)
       ruby_parser (>= 2.0.5)
     multi_json (1.0.3)
@@ -44,5 +45,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   em-websocket
+  json
   mysql2
   pry

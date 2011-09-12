@@ -1,3 +1,5 @@
+require 'json'
+
 class AppBase
   def initialize
     connect_incoming_pipe
@@ -36,5 +38,14 @@ protected
     @outgoing_pipe.flush
 
     wait_for_incoming
+  end
+
+  def deserialize_message_json(message)
+    JSON.parse(message)
+  end
+
+  def serialize_message_hash(message_hash, data)
+    message_hash["data"] = data
+    message_hash.to_json
   end
 end
