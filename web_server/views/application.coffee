@@ -32,7 +32,7 @@ jQuery ->
         console.log "onmessage #{ message.data }"
         json = $.parseJSON(message.data)
 
-        author = if json.type == "system" then "System" else "#{ json.user } @ #{ json.tag }"
+        author = if json.type == "system" then "System" else "#{ json.user.display_name } @ #{ json.tag.name }"
         $("#transcript").append("<p><dl><dt>#{ author }</dt><dd>#{ json.data }</dd></dl></p>")
 
       socket.onclose = ->
