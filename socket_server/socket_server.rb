@@ -24,12 +24,14 @@ EventMachine.run do
       client = Client.new(ws)
       AllClients.add(client)
       AllClients.system_broadcast "#{client.display_name} has connected."
+      AllClients.roster_update
     end
 
     ws.onclose do
       client = AllClients.find_by_socket(ws)
       AllClients.remove(ws)
       AllClients.system_broadcast "#{client.display_name} has disconnected."
+      AllClients.roster_update
     end
 
     ws.onmessage do |message_json|

@@ -29,9 +29,21 @@ class Clients
     broadcast message.to_json
   end
 
+  def roster_update
+    broadcast(self.to_json)
+  end
+
 protected
 
+  def to_json
+    {
+      type: "roster",
+      clients: clients
+    }.to_json
+  end
+
   def broadcast(json)
+    puts "Broadcasting #{json}"
     clients.each { |c| c.send json }
   end
 

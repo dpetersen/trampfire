@@ -16,4 +16,8 @@ class Client
   def display_name
     @user.display_name
   end
+
+  def as_json(options = {})
+    @user.as_json
+  end
 end

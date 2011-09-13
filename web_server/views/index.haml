@@ -9,6 +9,8 @@
     %li
       %a{ href: "#" }= tag.name
 
+%ul#roster
+
 #transcript{ data: { email: "#{env['warden'].user.email}" } }
   - @messages.each do |message|
     %p
