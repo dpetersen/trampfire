@@ -10,7 +10,11 @@
       %a{ href: "#" }= tag.name
 
 #transcript{ data: { email: "#{env['warden'].user.email}" } }
-  %p Initial
+  - @messages.each do |message|
+    %p
+      %dl
+        %dt #{message.user.display_name} @ #{message.tag.name}
+        %dd= message.final_message
 
 %form
   %input#outgoing.xlarge{ type: 'textarea' }

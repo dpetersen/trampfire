@@ -11,6 +11,7 @@ require 'sinatra/activerecord'
 require './lib/authorization_helpers'
 require '../models/user'
 require '../models/tag'
+require '../models/message'
 
 class TrampfireApp < Sinatra::Base
   set :public, 'public'
@@ -19,6 +20,7 @@ class TrampfireApp < Sinatra::Base
 
   get '/' do
     when_authenticated do
+      @messages = Message.order("updated_at DESC").limit(5).all.reverse
       haml :index, layout: :application
     end
   end
