@@ -10,7 +10,7 @@ class AppManager
 
   def process(message)
     processed_message_json = pass_message_json_through_app_bus(message)
-    JSON.parse(processed_message_json)
+    message.final_message = JSON.parse(processed_message_json)["data"]
   end
 
   def self.process(message)
@@ -26,8 +26,8 @@ protected
     @incoming_pipe = open(path, "r+")
   end
 
-  def pass_message_json_through_app_bus(message_json)
-    @apps.inject(message_json) do |passed_message, app_directory|
+  def pass_message_json_through_app_bus(message)
+    @apps.inject(message.to_json) do |passed_message, app_directory|
       app_pipe = open("#{AppsPath}/#{app_directory}/incoming", "w+")
       app_pipe.puts passed_message
       app_pipe.flush

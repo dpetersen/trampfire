@@ -8,6 +8,8 @@ require './lib/app_manager'
 
 require 'active_record'
 require '../models/user'
+require '../models/tag'
+require '../models/message'
 require '../database_config'
 
 ActiveRecord::Base.establish_connection(
@@ -35,12 +37,18 @@ EventMachine.run do
       AllClients.system_broadcast "#{client.display_name} has disconnected. Client Count: #{AllClients.count}"
     end
 
-    ws.onmessage do |message|
-      puts "Received Message: #{message}"
+    ws.onmessage do |message_json|
+      puts "Received message_json: #{message_json}"
 
-      processed_message_hash = AppManager.process(message)
-      puts "Modified message #{processed_message_hash.inspect}"
-      AllClients.client_broadcast AllClients.find_by_socket(ws), processed_message_hash
+      client = AllClients.find_by_socket(ws)
+      message = Message.create_for_user_from_json_string(client.user, message_json)
+
+      puts "Before: #{message.inspect}"
+      AppManager.process(message)
+
+      message.save
+      puts "After: #{message.inspect}"
+      AllClients.client_broadcast message
     end
   end
 end
