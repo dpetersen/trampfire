@@ -32,8 +32,8 @@ jQuery ->
         console.log "onmessage #{ message.data }"
         json = $.parseJSON(message.data)
 
-        author = if json.type == "system" then "System" else json.user
-        $("#transcript").append("<p><dl><dt>#{ author } @ #{ json.tag }</dt><dd>#{ json.data }</dd></dl></p>")
+        author = if json.type == "system" then "System" else "#{ json.user } @ #{ json.tag }"
+        $("#transcript").append("<p><dl><dt>#{ author }</dt><dd>#{ json.data }</dd></dl></p>")
 
       socket.onclose = ->
         console.log "onclose #{ socket.readyState }"
