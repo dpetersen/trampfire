@@ -2,9 +2,7 @@ require 'pry'
 
 require 'eventmachine'
 require 'em-websocket'
-require './lib/clients'
-require './lib/client'
-require './lib/app_manager'
+require './lib/libs'
 
 require 'active_record'
 require '../models/models'
