@@ -5,6 +5,10 @@ jQuery ->
     alert "You have no support for WebSockets in this browser.  Bye."
   else
 
+    currentTag = $("#tags a").first().text()
+    $("#tags a").click ->
+      currentTag = $(this).text()
+
     try
       # We're big on security around here.  Wait a minute...
       email = $("#transcript").data("email")
@@ -19,7 +23,7 @@ jQuery ->
 
         $("form").submit ->
           outgoing = $("#outgoing")
-          message = { type: 'chat', data: outgoing.val() }
+          message = { type: 'chat', data: outgoing.val(), tag: currentTag }
           socket.send JSON.stringify(message)
           outgoing.val("")
           return false
@@ -29,7 +33,7 @@ jQuery ->
         json = $.parseJSON(message.data)
 
         author = if json.type == "system" then "System" else json.user
-        $("#transcript").append("<p><dl><dt>#{ author }</dt><dd>#{ json.data }</dd></dl></p>")
+        $("#transcript").append("<p><dl><dt>#{ author } @ #{ json.tag }</dt><dd>#{ json.data }</dd></dl></p>")
 
       socket.onclose = ->
         console.log "onclose #{ socket.readyState }"

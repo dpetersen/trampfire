@@ -10,7 +10,7 @@ class AppManager
 
   def process(message)
     processed_message_json = pass_message_json_through_app_bus(message)
-    JSON.parse(processed_message_json)["data"]
+    JSON.parse(processed_message_json)
   end
 
   def self.process(message)

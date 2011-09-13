@@ -6,7 +6,8 @@
 
 %ul#tags
   - Tag.all.each do |tag|
-    %li= tag.name
+    %li
+      %a{ href: "#" }= tag.name
 
 #transcript{ data: { email: "#{env['warden'].user.email}" } }
   %p Initial

@@ -25,8 +25,8 @@ class Clients
     broadcast system_json(message)
   end
 
-  def client_broadcast(client, message)
-    broadcast chat_json(client.user, message)
+  def client_broadcast(client, message_hash)
+    broadcast chat_json(client.user, message_hash)
   end
 
 protected
@@ -35,12 +35,11 @@ protected
     clients.each { |c| c.send json }
   end
 
-  def chat_json(user, message)
-    {
+  def chat_json(user, message_hash)
+    message_hash.merge(
       type: "chat",
       user: user.display_name,
-      data: message
-    }.to_json
+    ).to_json
   end
 
   def system_json(message)

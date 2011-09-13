@@ -38,9 +38,9 @@ EventMachine.run do
     ws.onmessage do |message|
       puts "Received Message: #{message}"
 
-      message = AppManager.process(message)
-      puts "Modified message #{message}"
-      AllClients.client_broadcast AllClients.find_by_socket(ws), message
+      processed_message_hash = AppManager.process(message)
+      puts "Modified message #{processed_message_hash.inspect}"
+      AllClients.client_broadcast AllClients.find_by_socket(ws), processed_message_hash
     end
   end
 end
