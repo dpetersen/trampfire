@@ -21,16 +21,15 @@ EventMachine.run do
 
   EventMachine::WebSocket.start(host: "0.0.0.0", port: 8080) do |ws|
     ws.onopen do
-      puts "Connected!"
-      AllClients.add(Client.new(ws))
-      AllClients.system_broadcast "A client has joined.  Client Count: #{AllClients.count}"
+      client = Client.new(ws)
+      AllClients.add(client)
+      AllClients.system_broadcast "#{client.display_name} has connected."
     end
 
     ws.onclose do
-      puts "Disconnected..."
       client = AllClients.find_by_socket(ws)
       AllClients.remove(ws)
-      AllClients.system_broadcast "#{client.display_name} has disconnected. Client Count: #{AllClients.count}"
+      AllClients.system_broadcast "#{client.display_name} has disconnected."
     end
 
     ws.onmessage do |message_json|
@@ -39,11 +38,9 @@ EventMachine.run do
       client = AllClients.find_by_socket(ws)
       message = Message.create_for_user_from_json_string(client.user, message_json)
 
-      puts "Before: #{message.inspect}"
       AppManager.process(message)
-
       message.save
-      puts "After: #{message.inspect}"
+
       AllClients.client_broadcast message
     end
   end
