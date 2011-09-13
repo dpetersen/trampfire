@@ -7,9 +7,7 @@ require './lib/client'
 require './lib/app_manager'
 
 require 'active_record'
-require '../models/user'
-require '../models/tag'
-require '../models/message'
+require '../models/models'
 require '../database_config'
 
 ActiveRecord::Base.establish_connection(
