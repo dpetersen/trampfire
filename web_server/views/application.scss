@@ -1,0 +1,61 @@
+@import "semantic_grid";
+
+#navigation {
+  @include col(24);
+  @include last();
+}
+
+#navigation h1 {
+  display: inline;
+}
+
+#main {
+  @include col(24);
+  @include last();
+}
+
+#left-main {
+  @include col(16);
+}
+
+#transcript dl {
+  padding-bottom: 10px;
+  border-bottom: thin dotted #dfdfdf;
+}
+
+#transcript dl:last-child {
+  border-bottom: none;
+}
+
+#chat {
+  border-top: 3px solid #cfcfcf;
+}
+
+#chat form {
+  margin-top: 20px;
+}
+
+#outgoing {
+  width: 555px;
+}
+
+#sidebar {
+  @include prepend(1);
+  @include col(6);
+}
+
+#sidebar form input[type='text'] {
+  width: 130px;
+}
+
+#new-tag {
+  @include col(6);
+}
+
+#tags {
+  @include col(6);
+}
+
+#roster {
+  @include col(6);
+}

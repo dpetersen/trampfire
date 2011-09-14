@@ -1,23 +1,27 @@
-%a{ href: "/logout" } Log Out
-
-%form{ action: "/tags", method: "post" }
-  %input{ type: 'text', name: 'tag[name]' }
-  %input.btn.primary{ type: 'submit', value: "Create Tag" }
-
-%ul#tags
-  - Tag.all.each do |tag|
-    %li
-      %a{ href: "#" }= tag.name
-
-%ul#roster
-
-#transcript{ data: { email: "#{env['warden'].user.email}" } }
-  - @messages.each do |message|
-    %p
+#left-main.well
+  #transcript{ data: { email: "#{env['warden'].user.email}" } }
+    - @messages.each do |message|
       %dl
         %dt #{message.user.display_name} @ #{message.tag.name}
         %dd= message.final_message
 
-%form
-  %input#outgoing.xlarge{ type: 'textarea' }
-  %input.btn.primary{ type: 'submit' }
+  #chat
+    %form
+      %input#outgoing.xlarge{ type: 'textarea' }
+      %input.btn.primary{ type: 'submit' }
+
+#sidebar
+  %form#new-tag.well{ action: "/tags", method: "post" }
+    %input.small{ type: 'text', name: 'tag[name]' }
+    %input.btn.primary{ type: 'submit', value: "Create Tag" }
+
+  #tags.well
+    %h3 Tags
+    %ul#tags.pills
+      - Tag.all.each do |tag|
+        %li
+          %a{ href: "#" }= tag.name
+
+  #roster.well
+    %h3 Roster
+    %ul.unstyled

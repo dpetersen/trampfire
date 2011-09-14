@@ -19,7 +19,6 @@ jQuery ->
 
       socket.onopen = ->
         console.log "onopen #{ socket.readyState }"
-        $("#transcript").append("<p>Connected...</p>")
 
         $("form").submit ->
           outgoing = $("#outgoing")
@@ -34,13 +33,13 @@ jQuery ->
 
         if json.type == "system" || json.type == "chat"
           author = if json.type == "system" then "System" else "#{ json.user.display_name } @ #{ json.tag.name }"
-          $("#transcript").append("<p><dl><dt>#{ author }</dt><dd>#{ json.data }</dd></dl></p>")
+          $("#transcript").append("<dl><dt>#{ author }</dt><dd>#{ json.data }</dd></dl>")
         else if json.type == "roster"
           console.log "Roster update"
-          roster = $("#roster")
-          roster.empty()
+          rosterList = $("#roster ul")
+          rosterList.empty()
           for user in json.clients
-            roster.append("<li>#{ user.nick }</li>")
+            rosterList.append("<li>#{ user.nick }</li>")
         else
           console.log("I don't know what to do with message type: #{ json.type }")
 

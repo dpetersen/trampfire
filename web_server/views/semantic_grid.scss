@@ -1,0 +1,38 @@
+$width: 960px; /* total with of page */
+$columns: 24; /* number of columns */
+$col_margin: 0; /* margin between columns */
+
+$col_width: ($width - ($col_margin * ($columns - 1))) / $columns;
+$col_total_width: $col_width + $col_margin;
+
+@mixin row {
+  float: left;
+  clear: both;
+  width: $width;
+}
+
+@mixin col($n: 1) {
+  float: left;
+  @include span($n);
+}
+
+@mixin span($n: 1) {
+  width: ($n * $col_width) + (($n - 1) * $col_margin);
+  @if $n == $columns {
+    margin-right: 0;
+  } @else {
+    margin-right: $col_margin;
+  }
+}
+
+@mixin last() {
+  margin-right: 0;
+}
+
+@mixin prepend($n: 1) {
+  margin-left: $col_total_width * $n;
+}
+
+@mixin append($n: 1) {
+  margin-right: $col_total_width * $n + $col_margin;
+}

@@ -5,10 +5,15 @@
   %head
     %title Trampfire
     %link{ rel: 'stylesheet', href: 'bootstrap-1.2.0.min.css' }
+    %link{ rel: 'stylesheet', href: 'application.css' }
     %script{ src: 'jquery-1.6.3.min.js' }
     %script{ src: 'application.js' }
 
   %body
     .container
-      %h1 Trampfire
-      = yield
+      #navigation
+        %h1 Trampfire
+        %a{ href: "/logout" } Log Out
+
+      #main
+        = yield
