@@ -3,7 +3,7 @@ module AuthorizationHelpers
     if env['warden'].authenticated?
       yield
     else
-      haml :login, layout: :application
+      haml :login#, layout: :application
     end
   end
 end
