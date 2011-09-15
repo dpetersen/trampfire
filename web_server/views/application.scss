@@ -18,6 +18,12 @@
   @include col(16);
 }
 
+#transcript {
+  height: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
 #transcript dl {
   padding-bottom: 10px;
   border-bottom: thin dotted #dfdfdf;
