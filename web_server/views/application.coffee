@@ -38,8 +38,8 @@ class SocketConnection
   sendMessage: (message) ->
     @socket.send JSON.stringify(message)
 
-window.AppView = Backbone.View.extend({
-  el: "#main",
+window.AppView = Backbone.View.extend
+  el: "#main"
 
   initialize: ->
     @transcriptView = new TranscriptView
@@ -68,10 +68,9 @@ window.AppView = Backbone.View.extend({
 
   serverReady: ->
     @chatView.enable()
-})
 
-window.ChatView = Backbone.View.extend({
-  el: "#chat",
+window.ChatView = Backbone.View.extend
+  el: "#chat"
 
   events:
     "submit form": "submitPressed"
@@ -103,10 +102,9 @@ window.ChatView = Backbone.View.extend({
 
   updateActiveTagLabel: ->
     @activeTagLabel.text(@activeTagName)
-})
 
-window.TagsView = Backbone.View.extend({
-  el: "#tags",
+window.TagsView = Backbone.View.extend
+  el: "#tags"
 
   events:
     "click a": "tagLinkClicked"
@@ -130,10 +128,9 @@ window.TagsView = Backbone.View.extend({
 
   notifyTagChange: ->
     @trigger "tags:selectedChanged", @currentTagLink.text()
-})
 
-window.TranscriptView = Backbone.View.extend({
-  el: "#transcript",
+window.TranscriptView = Backbone.View.extend
+  el: "#transcript"
 
   initialize: ->
     $(@.el).resize => @autoscroll()
@@ -150,10 +147,9 @@ window.TranscriptView = Backbone.View.extend({
 
   autoscroll: ->
     $("body").scrollTop($(document).height())
-})
 
-window.RosterView = Backbone.View.extend({
-  el: "#roster",
+window.RosterView = Backbone.View.extend
+  el: "#roster"
 
   initialize: ->
     @rosterList = @.$("ul")
@@ -169,7 +165,6 @@ window.RosterView = Backbone.View.extend({
     @clearRoster()
     for user in @users
       @rosterList.append("<li>#{ user.nick }</li>")
-})
 
 jQuery ->
   window.App = new AppView
