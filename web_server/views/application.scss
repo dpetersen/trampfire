@@ -1,8 +1,5 @@
 @import "semantic_grid";
 
-// The transcript needs a matching padding due to fanciness
-$chatBottomMargin: 30px;
-
 #navigation {
   @include col(24);
   @include last();
@@ -34,7 +31,7 @@ $chatBottomMargin: 30px;
 }
 
 #transcript {
-  padding-bottom: $chatBottomMargin;
+  padding-bottom: 50px;
 }
 
 #transcript dl {
@@ -51,7 +48,7 @@ $chatBottomMargin: 30px;
   position: fixed;
   bottom: -10px;
   background-color: #ffffff;
-  padding-bottom: $chatBottomMargin;
+  padding-bottom: 20px;
 }
 
 #chat form {
