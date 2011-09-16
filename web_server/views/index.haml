@@ -8,8 +8,9 @@
 
   #chat
     %form
-      %input#outgoing.xlarge.disabled{ type: 'textarea' }
-      %input.btn.success.disabled{ type: 'submit' }
+      .control-wrapper
+        %input#outgoing.xlarge.disabled{ type: 'textarea' }
+        %input.btn.success.disabled{ type: 'submit' }
     %strong Active Tag:
     %em.activeTag loading...
 

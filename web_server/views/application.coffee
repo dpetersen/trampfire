@@ -45,6 +45,9 @@ class Roster extends Backbone.Collection
   model: User
 
 class Message extends Backbone.Model
+  validate: (attributes) ->
+    unless attributes.data? && attributes.data != ""
+      return "A message must be provided!"
 
 class AppView extends Backbone.View
   el: "#main"
@@ -106,9 +109,19 @@ class ChatView extends Backbone.View
     @outgoing.val("")
 
   submitPressed: (event) ->
-    message = new Message(type: 'chat', data: @outgoing.val(), tag: @activeTagName)
-    @trigger "chat:newMessage", message
+    message = new Message
+    if message.set(type: 'chat', data: @outgoing.val(), tag: @activeTagName)
+      @removeErrorState()
+      @trigger "chat:newMessage", message
+    else @setErrorState()
+
     event.preventDefault()
+
+  setErrorState: ->
+    @$(".control-wrapper").addClass("error")
+
+  removeErrorState: ->
+    @$(".control-wrapper").removeClass("error")
 
   activeTagChanged: (tag) ->
     @activeTagName = tag
