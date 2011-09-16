@@ -37,12 +37,14 @@ class SocketConnection
         console.info "Got unknown message type: '#{ message.type }'"
 
   sendMessage: (message) ->
-    @socket.send JSON.stringify(message)
+    @socket.send JSON.stringify(message.toJSON())
 
 class User extends Backbone.Model
 
 class Roster extends Backbone.Collection
   model: User
+
+class Message extends Backbone.Model
 
 class AppView extends Backbone.View
   el: "#main"
@@ -104,7 +106,7 @@ class ChatView extends Backbone.View
     @outgoing.val("")
 
   submitPressed: (event) ->
-    message = { type: 'chat', data: @outgoing.val(), tag: @activeTagName }
+    message = new Message(type: 'chat', data: @outgoing.val(), tag: @activeTagName)
     @trigger "chat:newMessage", message
     event.preventDefault()
 
