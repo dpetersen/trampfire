@@ -73,6 +73,9 @@ window.AppView = Backbone.View.extend({
 window.ChatView = Backbone.View.extend({
   el: "#chat",
 
+  events:
+    "submit form": "submitPressed"
+
   initialize: ->
     @form = @.$("form")
     @outgoing = @.$("#outgoing")
@@ -80,14 +83,7 @@ window.ChatView = Backbone.View.extend({
     @activeTagLabel = @.$(".activeTag")
     @activeTagName = ""
 
-    @bindEventListeners()
-
     @bind("chat:newMessage", @clearMessageField)
-
-  bindEventListeners: ->
-    $("form").submit =>
-      @submitPressed()
-      return false
 
   enable: ->
     @outgoing.removeClass("disabled")
@@ -96,9 +92,10 @@ window.ChatView = Backbone.View.extend({
   clearMessageField: ->
     @outgoing.val("")
 
-  submitPressed: ->
+  submitPressed: (event) ->
     message = { type: 'chat', data: @outgoing.val(), tag: @activeTagName }
     @trigger "chat:newMessage", message
+    event.preventDefault()
 
   activeTagChanged: (tag) ->
     @activeTagName = tag
@@ -111,21 +108,20 @@ window.ChatView = Backbone.View.extend({
 window.TagsView = Backbone.View.extend({
   el: "#tags",
 
+  events:
+    "click a": "tagLinkClicked"
+
   tags: ->
     @.$("a")
 
   initialize: ->
-    @bindEventListeners()
-    @tagLinkClicked(@tags().first())
+    @activateTagLink(@tags().first())
 
-  bindEventListeners: ->
-    that = this
-    @.$("a").click (event) =>
-      clickedLink = $(event.currentTarget)
-      @tagLinkClicked(clickedLink)
-      return false
+  tagLinkClicked: (event) ->
+    @activateTagLink($(event.currentTarget))
+    event.preventDefault()
 
-  tagLinkClicked: (tagLink) ->
+  activateTagLink: (tagLink) ->
     @currentTagLink.parent("li").removeClass("active") if @currentTagLink
     tagLink.parent("li").addClass("active")
 
