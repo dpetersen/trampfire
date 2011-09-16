@@ -162,8 +162,12 @@ window.RosterView = Backbone.View.extend({
     @rosterList.empty()
 
   updateRoster: (users) ->
+    @users = users
+    @render()
+
+  render: ->
     @clearRoster()
-    for user in users
+    for user in @users
       @rosterList.append("<li>#{ user.nick }</li>")
 })
 
