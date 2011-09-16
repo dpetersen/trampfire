@@ -8,8 +8,10 @@
 
   #chat
     %form
-      %input#outgoing.xlarge{ type: 'textarea' }
-      %input.btn.primary{ type: 'submit' }
+      %input#outgoing.xlarge.disabled{ type: 'textarea' }
+      %input.btn.success.disabled{ type: 'submit' }
+    %strong Active Tag:
+    %em.activeTag loading...
 
 #sidebar
   %form#new-tag.well{ action: "/tags", method: "post" }
