@@ -9,6 +9,12 @@ jQuery ->
     $("#tags a").click ->
       currentTag = $(this).text()
 
+    autoscroll = ->
+      $("body").scrollTop($(document).height())
+
+    $("#transcript").resize ->
+      autoscroll()
+
     try
       # We're big on security around here.  Wait a minute...
       email = $("#transcript").data("email")
@@ -43,7 +49,7 @@ jQuery ->
         else
           console.log("I don't know what to do with message type: #{ json.type }")
 
-        $("body").scrollTop($(document).height())
+        autoscroll()
 
       socket.onclose = ->
         console.log "onclose #{ socket.readyState }"
