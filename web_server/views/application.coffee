@@ -87,10 +87,10 @@ window.ChatView = Backbone.View.extend
     "submit form": "submitPressed"
 
   initialize: ->
-    @form = @.$("form")
-    @outgoing = @.$("#outgoing")
-    @sendButton = @.$("input[type='submit']")
-    @activeTagLabel = @.$(".activeTag")
+    @form = @$("form")
+    @outgoing = @$("#outgoing")
+    @sendButton = @$("input[type='submit']")
+    @activeTagLabel = @$(".activeTag")
     @activeTagName = ""
 
     @bind("chat:newMessage", @clearMessageField)
@@ -121,7 +121,7 @@ window.TagsView = Backbone.View.extend
     "click a": "tagLinkClicked"
 
   tags: ->
-    @.$("a")
+    @$("a")
 
   initialize: ->
     @activateTagLink(@tags().first())
@@ -144,7 +144,7 @@ window.TranscriptView = Backbone.View.extend
   el: "#transcript"
 
   initialize: ->
-    $(@.el).resize => @autoscroll()
+    $(@el).resize => @autoscroll()
 
   systemMessageReceived: (text) ->
     @appendToTranscript("System", text)
@@ -153,7 +153,7 @@ window.TranscriptView = Backbone.View.extend
     @appendToTranscript("#{ user } @ #{ tag }", text)
 
   appendToTranscript: (author, text) ->
-    $(@.el).append("<dl><dt>#{ author }</dt><dd>#{ text }</dd></dl>")
+    $(@el).append("<dl><dt>#{ author }</dt><dd>#{ text }</dd></dl>")
     @autoscroll()
 
   autoscroll: ->
@@ -163,7 +163,7 @@ window.RosterView = Backbone.View.extend
   el: "#roster"
 
   initialize: ->
-    @rosterList = @.$("ul")
+    @rosterList = @$("ul")
 
   clearRoster: ->
     @rosterList.empty()
