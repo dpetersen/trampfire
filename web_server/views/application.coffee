@@ -43,8 +43,7 @@ jQuery ->
         else
           console.log("I don't know what to do with message type: #{ json.type }")
 
-        /* This might not exactly scale.  Jaswa is rolling over in his grave. */
-        $("#transcript").scrollTop(10000)
+        $("body").scrollTop($(document).height())
 
       socket.onclose = ->
         console.log "onclose #{ socket.readyState }"

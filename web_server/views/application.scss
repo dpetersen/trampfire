@@ -1,8 +1,18 @@
 @import "semantic_grid";
 
+// The transcript needs a matching padding due to fanciness
+$chatBottomMargin: 30px;
+
 #navigation {
   @include col(24);
   @include last();
+}
+
+#navigation {
+  background-color: #ffffff;
+  width: 100%;
+  padding-bottom: 20px;
+  position: fixed;
 }
 
 #navigation h1 {
@@ -16,12 +26,15 @@
 
 #left-main {
   @include col(16);
+  top: 40px;
+}
+
+#transcript-wrapper {
+  overflow: hidden;
 }
 
 #transcript {
-  height: 600px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  padding-bottom: $chatBottomMargin;
 }
 
 #transcript dl {
@@ -35,6 +48,10 @@
 
 #chat {
   border-top: 3px solid #cfcfcf;
+  position: fixed;
+  bottom: -10px;
+  background-color: #ffffff;
+  padding-bottom: $chatBottomMargin;
 }
 
 #chat form {
@@ -46,8 +63,10 @@
 }
 
 #sidebar {
-  @include prepend(1);
+  @include prepend(18);
   @include col(6);
+  position: fixed;
+  margin-top: 50px;
 }
 
 #sidebar form input[type='text'] {
