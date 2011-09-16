@@ -39,12 +39,12 @@ class SocketConnection
   sendMessage: (message) ->
     @socket.send JSON.stringify(message)
 
-window.User = Backbone.Model.extend()
+class User extends Backbone.Model
 
-window.Roster = Backbone.Collection.extend
+class Roster extends Backbone.Collection
   model: User
 
-window.AppView = Backbone.View.extend
+class AppView extends Backbone.View
   el: "#main"
 
   initialize: ->
@@ -80,8 +80,10 @@ window.AppView = Backbone.View.extend
   updateRoster: (roster) ->
     @roster.reset(roster.models)
 
-window.ChatView = Backbone.View.extend
+class ChatView extends Backbone.View
   el: "#chat"
+
+  activeTagName: ""
 
   events:
     "submit form": "submitPressed"
@@ -91,7 +93,6 @@ window.ChatView = Backbone.View.extend
     @outgoing = @$("#outgoing")
     @sendButton = @$("input[type='submit']")
     @activeTagLabel = @$(".activeTag")
-    @activeTagName = ""
 
     @bind("chat:newMessage", @clearMessageField)
 
@@ -114,7 +115,7 @@ window.ChatView = Backbone.View.extend
   updateActiveTagLabel: ->
     @activeTagLabel.text(@activeTagName)
 
-window.TagsView = Backbone.View.extend
+class TagsView extends Backbone.View
   el: "#tags"
 
   events:
@@ -140,7 +141,7 @@ window.TagsView = Backbone.View.extend
   notifyTagChange: ->
     @trigger "tags:selectedChanged", @currentTagLink.text()
 
-window.TranscriptView = Backbone.View.extend
+class TranscriptView extends Backbone.View
   el: "#transcript"
 
   initialize: ->
@@ -159,7 +160,7 @@ window.TranscriptView = Backbone.View.extend
   autoscroll: ->
     $("body").scrollTop($(document).height())
 
-window.RosterView = Backbone.View.extend
+class RosterView extends Backbone.View
   el: "#roster"
 
   initialize: ->
