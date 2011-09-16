@@ -31,9 +31,7 @@ class SocketConnection
       when "chat"
         @trigger "socket:message:chat", message.user.display_name, message.tag.name, message.data
       when "roster"
-        console.info message.clients
         roster = new Roster(message.clients)
-        console.info roster
         @trigger "socket:message:roster", roster
       else
         console.info "Got unknown message type: '#{ message.type }'"
@@ -41,7 +39,7 @@ class SocketConnection
   sendMessage: (message) ->
     @socket.send JSON.stringify(message)
 
-window.User = Backbone.Model.extend
+window.User = Backbone.Model.extend()
 
 window.Roster = Backbone.Collection.extend
   model: User
@@ -72,6 +70,7 @@ window.AppView = Backbone.View.extend
   bindUIEvents: ->
     @tagsView.bind("tags:selectedChanged", @chatView.activeTagChanged, @chatView)
     @chatView.bind("chat:newMessage", @socketConnection.sendMessage, @socketConnection)
+    @roster.bind("reset", @rosterView.updateRoster, @rosterView)
 
     @tagsView.notifyTagChange() # Event is fired before anybody is listening
 
@@ -79,7 +78,7 @@ window.AppView = Backbone.View.extend
     @chatView.enable()
 
   updateRoster: (roster) ->
-    @roster.reset(roster)
+    @roster.reset(roster.models)
 
 window.ChatView = Backbone.View.extend
   el: "#chat"
@@ -169,14 +168,14 @@ window.RosterView = Backbone.View.extend
   clearRoster: ->
     @rosterList.empty()
 
-  updateRoster: (users) ->
-    @users = users
+  updateRoster: (roster) ->
+    @roster = roster
     @render()
 
   render: ->
     @clearRoster()
-    for user in @users
-      @rosterList.append("<li>#{ user.nick }</li>")
+    @roster.each (user) =>
+      @rosterList.append("<li>#{ user.get("nick") }</li>")
 
 jQuery ->
   window.App = new AppView
