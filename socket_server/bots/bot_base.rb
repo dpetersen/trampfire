@@ -3,23 +3,7 @@ require 'json'
 class BotBase
   def initialize
     connect_incoming_pipe
-
     wait_for_incoming
-  end
-
-  def process(message_json)
-    message_hash = deserialize_message_json(message_json)
-    original_message = message_hash["data"]
-
-    modified_message = modify_message(original_message)
-
-    if modified_message != nil && modified_message != original_message
-      serialize_message_hash(
-        message_hash,
-        modified_message
-      )
-    else message_json
-    end
   end
 
 protected
@@ -58,6 +42,22 @@ protected
     @outgoing_pipe.flush
 
     wait_for_incoming
+  end
+
+  def process(message_json)
+    message_hash = deserialize_message_json(message_json)
+    original_message = message_hash["data"]
+
+    request_klass = Object.const_get(self.class.to_s + "Request")
+    modified_message = request_klass.new(original_message).process
+
+    if modified_message != nil && modified_message != original_message
+      serialize_message_hash(
+        message_hash,
+        modified_message
+      )
+    else message_json
+    end
   end
 
   def deserialize_message_json(message)

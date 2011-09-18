@@ -1,21 +1,24 @@
 require '../bot_base'
+require '../bot_request_base'
 
-class ImageBot < BotBase
-  def modify_message(message)
+class ImageBotRequest < BotRequestBase
+  def process
     if message =~ /^http(.*)\.(gif|jpg|jpeg|png)$/
-      tag_html(message)
+      tag_html
     end
   end
 
 protected
 
-  def tag_html(url)
+  def tag_html
     <<-eos
-      <a href="#{url}">
-        <img src="#{url}" alt="#{url}" />
+      <a href="#{message}">
+        <img src="#{message}" alt="#{message}" />
       </a>
     eos
   end
 end
 
+class ImageBot < BotBase
+end
 ImageBot.new

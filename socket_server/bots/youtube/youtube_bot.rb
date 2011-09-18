@@ -1,7 +1,8 @@
 require '../bot_base'
+require '../bot_request_base'
 
-class YoutubeBot < BotBase
-  def modify_message(message)
+class YoutubeBotRequest < BotRequestBase
+  def process
     if message =~ /^http:\/\/www\.youtube\.com\/watch\?v\=(.*)$/
       embed_html($1)
     end
@@ -21,6 +22,9 @@ protected
       </object>
     eos
   end
+end
+
+class YoutubeBot < BotBase
 end
 
 YoutubeBot.new
