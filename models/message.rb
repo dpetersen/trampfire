@@ -13,12 +13,32 @@ class Message < ActiveRecord::Base
     )
   end
 
-  def to_json
-    {
-      type: "chat",
-      user: user.to_hash,
-      tag: tag.to_hash,
-      data: self.final_message || self.original_message
-    }.to_json
+  def type
+    if user.present? then "chat"
+    else "system"
+    end
+  end
+
+  def data
+    self.final_message || self.original_message
+  end
+
+  # Getting around an #as_json issue.
+  def user_hack
+    user.as_json
+  end
+
+  # See #author
+  def tag_hack
+    tag.as_json
+  end
+
+  # Can't use 'include' here because it won't call as_json on children
+  # See: https://github.com/rails/rails/issues/576
+  def as_json(options = {})
+    super(
+      only: [ :id, :original_message, :created_at ],
+      methods: [ :type, :data, :user_hack, :tag_hack ]
+    )
   end
 end

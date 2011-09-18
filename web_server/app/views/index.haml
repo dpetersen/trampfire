@@ -1,10 +1,6 @@
 #left-main
   #transcript-wrapper.well
-    #transcript{ data: { email: "#{env['warden'].user.email}" } }
-      - @messages.each do |message|
-        %dl
-          %dt #{message.user.display_name} @ #{message.tag.name}
-          %dd= message.final_message
+    #transcript{ data: { email: "#{env['warden'].user.email}", messages: @messages.to_json } }
 
   #chat
     %form

@@ -43,7 +43,7 @@ EventMachine.run do
       AppManager.process(message)
       message.save
 
-      AllClients.client_broadcast message
+      AllClients.client_broadcast message.as_json.to_json
     end
   end
 end

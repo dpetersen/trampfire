@@ -3,10 +3,9 @@ class Tag < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
 
-  def to_hash
-    {
-      id: id,
-      name: name
-    }
+  def as_json(options = {})
+    super(
+      only: [ :id, :name ]
+    )
   end
 end

@@ -27,7 +27,7 @@ protected
   end
 
   def pass_message_json_through_app_bus(message)
-    @apps.inject(message.to_json) do |passed_message, app_directory|
+    @apps.inject(message.as_json.to_json) do |passed_message, app_directory|
       app_pipe = open("#{AppsPath}/#{app_directory}/incoming", "w+")
       app_pipe.puts passed_message
       app_pipe.flush

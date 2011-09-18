@@ -23,13 +23,15 @@ class Trampfire.SocketConnection
     alert "Socket connection has closed unexpectedly!"
 
   onMessage: (messageEvent) =>
+    console.info "onMessage"
+    console.info messageEvent.data
     message = $.parseJSON(messageEvent.data)
 
     switch message.type
       when "system"
         @trigger "socket:message:system", message.data
       when "chat"
-        @trigger "socket:message:chat", message.user.display_name, message.tag.name, message.data
+        @trigger "socket:message:chat", new Trampfire.Message(message)
       when "roster"
         roster = new Trampfire.Roster(message.clients)
         @trigger "socket:message:roster", roster
