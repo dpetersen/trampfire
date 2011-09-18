@@ -14,5 +14,5 @@ class Trampfire.RosterView extends Backbone.View
   render: ->
     @clearRoster()
     @roster.each (user) =>
-      @rosterList.append("<li>#{ user.get("nick") }</li>")
+      @rosterList.append("<li>#{ user.get("display_name") }</li>")
 
