@@ -1,3 +1,5 @@
+#= require vendor/load_orderer
+
 class SocketConnection
   constructor: (@url) ->
     _.extend(this, Backbone.Events)

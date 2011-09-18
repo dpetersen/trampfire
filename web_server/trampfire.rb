@@ -12,8 +12,6 @@ require './lib/authorization_helpers'
 require '../models/models'
 
 class TrampfireApp < Sinatra::Base
-  set :public, 'public'
-
   include AuthorizationHelpers
 
   get '/' do
