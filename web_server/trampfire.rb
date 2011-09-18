@@ -12,6 +12,8 @@ require './lib/authorization_helpers'
 require '../models/models'
 
 class TrampfireApp < Sinatra::Base
+  set :views, File.dirname(__FILE__) + '/app/views'
+
   include AuthorizationHelpers
 
   get '/' do
