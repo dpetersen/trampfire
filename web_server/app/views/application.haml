@@ -7,7 +7,7 @@
     %link{ rel: 'stylesheet', href: 'assets/application.css' }
     %script{ src: 'assets/application.js' }
 
-  %body
+  %body{ data: { email: "#{env['warden'].user.email}" } }
     .container
       #navigation
         %h1 Trampfire

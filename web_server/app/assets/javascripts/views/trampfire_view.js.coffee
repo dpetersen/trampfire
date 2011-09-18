@@ -9,7 +9,7 @@ class Trampfire.TrampfireView extends Backbone.View
     @rosterView = new Trampfire.RosterView
 
     # We're big on security around here.  Wait a minute...
-    email = $("#transcript").data("email")
+    email = $("body").data("email")
     @socketConnection = new Trampfire.SocketConnection("ws://localhost:8080?email=#{ email }")
 
     @bindNetworkEvents()

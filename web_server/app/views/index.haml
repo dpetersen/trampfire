@@ -1,6 +1,6 @@
 #left-main
   #transcript-wrapper.well
-    #transcript{ data: { email: "#{env['warden'].user.email}", messages: @messages.to_json } }
+    #transcript{ data: { messages: @messages.to_json } }
 
   #chat
     %form
