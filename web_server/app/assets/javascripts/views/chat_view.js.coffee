@@ -1,5 +1,6 @@
 class Trampfire.ChatView extends Backbone.View
   el: "#chat"
+  enabled: false
 
   activeTagName: ""
 
@@ -15,6 +16,8 @@ class Trampfire.ChatView extends Backbone.View
     @bind("chat:newMessage", @clearMessageField)
 
   enable: ->
+    console.info "Enable"
+    @enabled = true
     @outgoing.removeClass("disabled")
     @sendButton.removeClass("disabled")
 
@@ -22,11 +25,13 @@ class Trampfire.ChatView extends Backbone.View
     @outgoing.val("")
 
   submitPressed: (event) ->
-    message = new Trampfire.Message
-    if message.set(type: 'chat', data: @outgoing.val(), tag: @activeTagName)
-      @removeErrorState()
-      @trigger "chat:newMessage", message
-    else @setErrorState()
+    if @enabled
+      message = new Trampfire.Message
+      if message.set(type: 'chat', data: @outgoing.val(), tag: @activeTagName)
+        @removeErrorState()
+        @trigger "chat:newMessage", message
+      else @setErrorState()
+    else alert "I'm not ready yet.  Settle down."
 
     event.preventDefault()
 
