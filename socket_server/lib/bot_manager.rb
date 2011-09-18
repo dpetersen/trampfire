@@ -2,9 +2,10 @@ require 'pathname'
 
 class BotManager
   BotsPath = "bots"
+  ActivatedBotsPath = BotsPath + "/activated"
 
   def initialize
-    @bots = Pathname.glob("#{BotsPath}/*/").map { |i| i.basename.to_s }
+    @bots = Pathname.glob("#{ActivatedBotsPath}/*/").map { |i| i.basename.to_s }
     connect_incoming_named_pipe
   end
 
@@ -28,7 +29,7 @@ protected
 
   def pass_message_json_through_bot_bus(message)
     @bots.inject(message.as_json.to_json) do |passed_message, bot_directory|
-      bot_pipe = open("#{BotsPath}/#{bot_directory}/incoming", "w+")
+      bot_pipe = open("#{ActivatedBotsPath}/#{bot_directory}/incoming", "w+")
       bot_pipe.puts passed_message
       bot_pipe.flush
 

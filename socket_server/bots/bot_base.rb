@@ -33,11 +33,16 @@ protected
   # Called at message time, not on initialize.  If the pipe doesn't
   # exist, Ruby creates a file in its place.  On first launch, it
   # probably won't be there by the time this initializes.
+  # 
+  # The running bots will technically be in bots/activated.
   def connect_outgoing_pipe
     return if @outgoing_pipe
 
     path = "../bot_manager_incoming"
-    @outgoing_pipe = open(path, "w+") if File.exist?(path)
+    if File.exist?(path)
+      @outgoing_pipe = open(path, "w+")
+    else raise "Can't connect to bot manager's named pipe!"
+    end
   end
 
   def wait_for_incoming
