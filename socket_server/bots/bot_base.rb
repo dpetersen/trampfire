@@ -1,6 +1,6 @@
 require 'json'
 
-class AppBase
+class BotBase
   def initialize
     connect_incoming_pipe
 
@@ -36,7 +36,7 @@ protected
   def connect_outgoing_pipe
     return if @outgoing_pipe
 
-    path = "../app_manager_incoming"
+    path = "../bot_manager_incoming"
     @outgoing_pipe = open(path, "w+") if File.exist?(path)
   end
 

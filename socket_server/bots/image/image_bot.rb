@@ -1,6 +1,6 @@
-require '../app_base'
+require '../bot_base'
 
-class Imager < AppBase
+class ImageBot < BotBase
   def modify_message(message)
     if message =~ /^http(.*)\.(gif|jpg|jpeg|png)$/
       tag_html(message)
@@ -18,4 +18,4 @@ protected
   end
 end
 
-Imager.new
+ImageBot.new

@@ -40,7 +40,7 @@ EventMachine.run do
       client = AllClients.find_by_socket(ws)
       message = Message.create_for_user_from_json_string(client.user, message_json)
 
-      AppManager.process(message)
+      BotManager.process(message)
       message.save
 
       AllClients.client_broadcast message.as_json.to_json

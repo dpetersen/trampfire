@@ -1,6 +1,6 @@
-require '../app_base'
+require '../bot_base'
 
-class Youtuber < AppBase
+class YoutubeBot < BotBase
   def modify_message(message)
     if message =~ /^http:\/\/www\.youtube\.com\/watch\?v\=(.*)$/
       embed_html($1)
@@ -22,4 +22,4 @@ protected
   end
 end
 
-Youtuber.new
+YoutubeBot.new
