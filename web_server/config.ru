@@ -1,4 +1,5 @@
 require 'warden'
+require 'sprockets'
 require './google_auth_strategy'
 require './access_control'
 require './trampfire'
@@ -11,5 +12,15 @@ use Warden::Manager do |manager|
   manager.failure_app = AccessControlApp
 end
 
+
 use AccessControlApp
-run TrampfireApp
+use TrampfireApp
+
+map '/assets' do
+  environment = Sprockets::Environment.new
+
+  environment.append_path 'app/assets/javascripts'
+  environment.append_path 'app/assets/stylesheets'
+
+  run environment
+end

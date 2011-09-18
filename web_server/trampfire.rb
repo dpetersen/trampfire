@@ -23,14 +23,6 @@ class TrampfireApp < Sinatra::Base
     end
   end
 
-  get '/application.js' do
-    coffee :application
-  end
-
-  get '/application.css' do
-    scss :application
-  end
-
   post '/tags' do
     when_authenticated do
       Tag.create(params[:tag])
