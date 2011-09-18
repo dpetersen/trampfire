@@ -16,7 +16,6 @@ class Trampfire.ChatView extends Backbone.View
     @bind("chat:newMessage", @clearMessageField)
 
   enable: ->
-    console.info "Enable"
     @enabled = true
     @outgoing.removeClass("disabled")
     @sendButton.removeClass("disabled")
