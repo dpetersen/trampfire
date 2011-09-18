@@ -17,7 +17,7 @@ class Trampfire.TranscriptView extends Backbone.View
     @appendToTranscript("System", text)
 
   chatMessageReceived: (message) ->
-    author = "#{ message.get("user_hack").display_name } @ #{ message.get("tag_hack").name }"
+    author = "#{ message.user().get("display_name") } @ #{ message.tag().get("name") }"
     text = message.get("data")
     @appendToTranscript(author, text)
 
