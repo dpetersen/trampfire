@@ -4,6 +4,7 @@
 #= require_directory ./collections
 #= require_directory ./views
 #= require_directory ./lib
+#= require_directory ./templates
 
 Trampfire ?= {}
 

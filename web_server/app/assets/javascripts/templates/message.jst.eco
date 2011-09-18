@@ -1,0 +1,4 @@
+<dl>
+  <dt><%= @author %></dt>
+  <dd><%= @text %></dd>
+</dl>

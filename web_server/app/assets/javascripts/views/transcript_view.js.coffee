@@ -22,7 +22,7 @@ class Trampfire.TranscriptView extends Backbone.View
     @appendToTranscript(author, text)
 
   appendToTranscript: (author, text) ->
-    $(@el).append("<dl><dt>#{ author }</dt><dd>#{ text }</dd></dl>")
+    $(@el).append(JST["templates/message"](author: author, text: text))
     @autoscroll()
 
   autoscroll: ->

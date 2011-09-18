@@ -23,6 +23,11 @@ GEM
       execjs
     coffee-script-source (1.1.2)
     daemons (1.1.4)
+    eco (1.0.0)
+      coffee-script
+      eco-source
+      execjs
+    eco-source (1.1.0.rc.1)
     eventmachine (0.12.10)
     execjs (1.2.6)
       multi_json (~> 1.0)
@@ -127,6 +132,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   coffee-script
+  eco
   haml
   mysql2
   omniauth
