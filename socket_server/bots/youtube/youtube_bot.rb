@@ -17,6 +17,7 @@ protected
         data="http://www.youtube.com/v/#{video_id}" 
       > 
         <param name="movie" value="http://www.youtube.com/v/#{video_id}" />
+        <param name="wmode" value="opaque" />
       </object>
     eos
   end
