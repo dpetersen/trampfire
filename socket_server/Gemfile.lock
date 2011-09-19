@@ -44,6 +44,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  activesupport
   em-websocket
   json
   mysql2

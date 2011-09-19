@@ -1,6 +1,19 @@
+require 'active_support/core_ext'
 require 'json'
 
 class BotBase
+  BotsRoot = File.dirname(__FILE__)
+
+  def self.inherited(subclass)
+    bot_directory_name = subclass.name.underscore.gsub(/_bot/, '')
+    bot_config = File.join(BotsRoot, bot_directory_name, "config.yml")
+
+    if File.exists?(bot_config)
+      subclass.instance_variable_set(:"@config", YAML::load(File.open(bot_config)))
+      puts subclass.instance_variable_get(:"@config")
+    end
+  end
+
   def initialize
     connect_incoming_pipe
     wait_for_incoming
