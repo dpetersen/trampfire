@@ -1,6 +1,3 @@
-class Trampfire.Transcript extends Backbone.Collection
-  model: Trampfire.Message
-
 class Trampfire.TranscriptView extends Backbone.View
   el: "#transcript"
 
