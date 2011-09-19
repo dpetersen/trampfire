@@ -9,7 +9,7 @@ class Message < ActiveRecord::Base
     create(
       user: user,
       tag: Tag.find_by_name!(hash["tag"]),
-      original_message: hash["data"]
+      original_message: hash["data"].strip
     )
   end
 
