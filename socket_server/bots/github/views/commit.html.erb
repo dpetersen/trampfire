@@ -1,5 +1,24 @@
 <div class="github-bot">
-  <img src="<%= gravatar_url %>" />
-  <a href="<%= repo_url %>"><em><%= repository_name %></em></a>
-  <a href="<%= commit_url %>"><%= commit_message %></a>
+  <p class="commit-message">
+    <a href="<%= repo_owner_path %>"><%= repo_owner %></a>
+    /
+    <a href="<%= repo_path %>"><%= repo_name %></a>
+    <br />
+    <%= commit_message %>
+  </p>
+  <div class="commit-meta">
+    <span class="sha-block">
+      commit
+      <span class="sha">
+        <a href="<%= commit_url %>"><%= sha %></a>
+      </span>
+    </span>
+    <div class="authorship">
+      <img src="<%= gravatar_url %>" width="24" height="24" />
+      <span class="author-name">
+        <a href="<%= user_path %>"><%= commit_author %></a>
+      </span>
+      authored
+    </div>
+  </div>
 </div>

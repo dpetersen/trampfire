@@ -1,3 +1,50 @@
 .github-bot {
-  background-color: #4E575B;
+  background: #E6F1F6;
+  border: 1px solid #C5D5DD;
+  border-radius: 4px;
+}
+
+.github-bot .commit-meta {
+  display: block;
+  background: white;
+  border-top: 1px solid #D8E6EC;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.github-bot .commit-message {
+  margin-top: 8px;
+  margin-left: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #213F4D;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.5)
+}
+
+.github-bot .authorship {
+  margin-top: 8px;
+  margin-left: 8px;
+  padding-bottom: 8px;
+  font-size: 14px;
+  color: #999;
+}
+
+.github-bot .authorship a {
+  color: #444;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.github-bot .sha-block {
+  margin-top: 18px;
+  margin-right: 8px;
+  float: right;
+  color: #888;
+  font-size: 12px;
+}
+
+.github-bot .sha {
+  font-size: 11px;
+  font-family: Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+  color: #444;
 }

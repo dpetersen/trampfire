@@ -40,12 +40,16 @@ protected
     gravatar_url = "http://gravatar.com/avatar/#{md5}"
 
     {
-      repository_name: repo["name"],
-      repo_url: repo["url"],
+      repo_name: repo["name"],
+      repo_path: repo["url"],
       commit_author: commit["author"]["name"],
       gravatar_url: gravatar_url,
       commit_url: "http://github.com#{commit["url"]}",
-      commit_message: commit["message"]
+      commit_message: commit["message"],
+      sha: sha,
+      user_path: "http://github.com/#{commit["author"]["login"]}",
+      repo_owner: user_name,
+      repo_owner_path: "http://github.com/#{user_name}"
     }
   end
 end
