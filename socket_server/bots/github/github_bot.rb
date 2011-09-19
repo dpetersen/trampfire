@@ -1,5 +1,6 @@
 require '../bot_base'
 require '../bot_request_base'
+require './github_api_helper'
 
 require 'pry'
 
@@ -11,8 +12,9 @@ class GithubBotRequest < BotRequestBase
       @sha = $3
 
       within_subprocess do
-        sleep 1
-        message_hash["data"] = "I am a message from a later time. #{@sha}."
+        commit = GithubApiHelper.commit(config["api_key"], @user, @repo, @sha)
+
+        message_hash["data"] = "Author: #{commit["author"]["name"]}, message: #{commit["message"]}"
         @asynchronous_pipe.puts message_hash.to_json
         @asynchronous_pipe.flush
       end

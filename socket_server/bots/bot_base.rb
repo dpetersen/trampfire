@@ -10,8 +10,11 @@ class BotBase
 
     if File.exists?(bot_config)
       subclass.instance_variable_set(:"@config", YAML::load(File.open(bot_config)))
-      puts subclass.instance_variable_get(:"@config")
     end
+  end
+
+  def self.config
+    @config
   end
 
   def initialize
@@ -58,7 +61,7 @@ protected
   def process(message_json)
     message_hash = deserialize_message_json(message_json)
     request_klass = Object.const_get(self.class.to_s + "Request")
-    modified_message = request_klass.new(message_hash).process
+    modified_message = request_klass.new(self.class, message_hash).process
 
     if modified_message != nil && modified_message != message_hash["data"]
       serialize_message_hash(

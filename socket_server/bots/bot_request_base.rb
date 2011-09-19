@@ -1,9 +1,15 @@
 class BotRequestBase
+  attr_reader :parent_bot_class
   attr_accessor :message_hash, :message
 
-  def initialize(message_hash)
+  def initialize(parent_bot_class, message_hash)
+    @parent_bot_class = parent_bot_class
     self.message_hash = message_hash
     self.message = message_hash["data"]
+  end
+
+  def config
+    self.parent_bot_class.config
   end
 
   protected
