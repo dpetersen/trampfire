@@ -1,3 +1,9 @@
+// I'd love to get more programmatic about this, but that doesn't
+// seem possible at the moment.
+// This won't follow symlinks, either, so it will require CSS for
+// inactive bots.
+//= require_tree ../../../../socket_server/bots
+//
 //= require vendor/load_orderer
 
 @import "semantic_grid";
