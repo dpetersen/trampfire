@@ -21,6 +21,7 @@ GEM
     em-websocket (0.3.1)
       addressable (>= 2.1.1)
       eventmachine (>= 0.12.9)
+    erubis (2.7.0)
     eventmachine (0.12.10)
     i18n (0.6.0)
     json (1.6.1)
@@ -46,6 +47,7 @@ DEPENDENCIES
   activerecord
   activesupport
   em-websocket
+  erubis
   json
   mysql2
   pry

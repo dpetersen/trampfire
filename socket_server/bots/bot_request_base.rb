@@ -1,3 +1,5 @@
+require 'erubis'
+
 class BotRequestBase
   attr_reader :parent_bot_class
   attr_accessor :message_hash, :message
@@ -10,6 +12,11 @@ class BotRequestBase
 
   def config
     self.parent_bot_class.config
+  end
+
+  def render_view(view, variables = {})
+    template = File.open("views/#{view}.html.erb", variables).read
+    Erubis::Eruby.new(template).result(variables)
   end
 
   protected

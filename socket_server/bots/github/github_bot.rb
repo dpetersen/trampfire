@@ -1,6 +1,7 @@
 require '../bot_base'
 require '../bot_request_base'
 require './github_api_helper'
+require 'digest/md5'
 
 require 'pry'
 
@@ -12,9 +13,20 @@ class GithubBotRequest < BotRequestBase
       @sha = $3
 
       within_subprocess do
-        commit = GithubApiHelper.commit(config["api_key"], @user, @repo, @sha)
+        github =  GithubApiHelper.new(config["username"], config["api_key"])
+        repo = github.repo(@user, @repo)
+        commit = github.commit(@user, @repo, @sha)
+        md5 = Digest::MD5.hexdigest(commit["author"]["email"])
+        gravatar_url = "http://gravatar.com/avatar/#{md5}"
 
-        message_hash["data"] = "Author: #{commit["author"]["name"]}, message: #{commit["message"]}"
+        message_hash["data"] = render_view "commit", {
+          repository_name: repo["name"],
+          repo_url: repo["url"],
+          commit_author: commit["author"]["name"],
+          gravatar_url: gravatar_url,
+          commit_url: "http://github.com#{commit["url"]}",
+          commit_message: commit["message"]
+        }
         @asynchronous_pipe.puts message_hash.to_json
         @asynchronous_pipe.flush
       end
