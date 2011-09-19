@@ -17,8 +17,6 @@ protected
   # Called at message time, not on initialize.  If the pipe doesn't
   # exist, Ruby creates a file in its place.  On first launch, it
   # probably won't be there by the time this initializes.
-  # 
-  # The running bots will technically be in bots/activated.
   def connect_outgoing_pipe
     return if @outgoing_pipe
 
@@ -46,12 +44,10 @@ protected
 
   def process(message_json)
     message_hash = deserialize_message_json(message_json)
-    original_message = message_hash["data"]
-
     request_klass = Object.const_get(self.class.to_s + "Request")
-    modified_message = request_klass.new(original_message).process
+    modified_message = request_klass.new(message_hash).process
 
-    if modified_message != nil && modified_message != original_message
+    if modified_message != nil && modified_message != message_hash["data"]
       serialize_message_hash(
         message_hash,
         modified_message

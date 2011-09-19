@@ -1,5 +1,6 @@
 require 'pry'
 
+require 'fcntl'
 require 'eventmachine'
 require 'em-websocket'
 require './lib/libs'
@@ -17,6 +18,13 @@ ActiveRecord::Base.establish_connection(
 )
 
 AllClients = Clients.new
+
+asynchronous_incoming_pipe_path = 'bots/asynchronous_incoming_pipe_path'
+AsynchronousMessageHandler.create_incoming_pipe(asynchronous_incoming_pipe_path)
+
+# For OSX support, apparently
+EventMachine.kqueue = true if EventMachine.kqueue?
+
 EventMachine.run do
 
   EventMachine::WebSocket.start(host: "0.0.0.0", port: 8080) do |ws|
@@ -46,4 +54,9 @@ EventMachine.run do
       AllClients.client_broadcast message.as_json.to_json
     end
   end
+
+  file_descriptor = IO.sysopen(asynchronous_incoming_pipe_path, Fcntl::O_RDONLY|Fcntl::O_NONBLOCK)
+  io_stream = IO.new(file_descriptor, Fcntl::O_RDONLY|Fcntl::O_NONBLOCK)
+  pipe_watcher = EventMachine.watch(io_stream, AsynchronousMessageHandler)
+  pipe_watcher.notify_readable = true
 end

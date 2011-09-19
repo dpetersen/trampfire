@@ -35,6 +35,8 @@ class Trampfire.SocketConnection
       when "roster"
         roster = new Trampfire.Roster(message.clients)
         @trigger "socket:message:roster", roster
+      when "update"
+        @trigger "socket:message:update", new Trampfire.Message(message)
       else
         console.info "Got unknown message type: '#{ message.type }'"
 

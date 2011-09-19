@@ -1,4 +1,4 @@
-<dl>
+<dl data-id="<%= @id %>">
   <dt><%= @author %></dt>
   <dd><%- @text %></dd>
 </dl>

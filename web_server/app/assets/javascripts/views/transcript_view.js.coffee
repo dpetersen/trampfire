@@ -16,14 +16,20 @@ class Trampfire.TranscriptView extends Backbone.View
   systemMessageReceived: (text) ->
     @appendToTranscript("System", text)
 
+  updateMessageReceived: (message) ->
+    @updateTranscript(message.get("id"), message.get("data"))
+
   chatMessageReceived: (message) ->
     author = "#{ message.user().get("display_name") } @ #{ message.tag().get("name") }"
     text = message.get("data")
-    @appendToTranscript(author, text)
+    @appendToTranscript(author, text, message.get("id"))
 
-  appendToTranscript: (author, text) ->
-    $(@el).append(JST["templates/message"](author: author, text: text))
+  appendToTranscript: (author, text, id) ->
+    $(@el).append(JST["templates/message"](id: id, author: author, text: text))
     @autoscroll()
+
+  updateTranscript: (id, text) ->
+    @$("dl[data-id='#{ id }'] dd").html(text)
 
   autoscroll: ->
     $("body").scrollTop($(document).height())

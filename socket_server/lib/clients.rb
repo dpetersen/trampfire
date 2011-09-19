@@ -29,6 +29,10 @@ class Clients
     broadcast message.as_json
   end
 
+  def update_broadcast(message)
+    broadcast message.as_json.merge(type: "update").to_json
+  end
+
   def roster_update
     broadcast(self.to_json)
   end
@@ -43,7 +47,6 @@ protected
   end
 
   def broadcast(json)
-    puts "Broadcasting #{json}"
     clients.each { |c| c.send json }
   end
 

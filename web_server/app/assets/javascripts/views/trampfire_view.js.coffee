@@ -19,6 +19,7 @@ class Trampfire.TrampfireView extends Backbone.View
     @socketConnection.bind("socket:connected", @serverReady, this)
     @socketConnection.bind("socket:message:system", @transcriptView.systemMessageReceived, @transcriptView)
     @socketConnection.bind("socket:message:chat", @transcriptView.chatMessageReceived, @transcriptView)
+    @socketConnection.bind("socket:message:update", @transcriptView.updateMessageReceived, @transcriptView)
     @socketConnection.bind("socket:message:roster", @updateRoster, this)
 
   bindUIEvents: ->
