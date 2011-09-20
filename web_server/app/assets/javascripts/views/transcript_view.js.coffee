@@ -3,6 +3,7 @@ class Trampfire.TranscriptView extends Backbone.View
 
   initialize: ->
     $(@el).resize => @autoscroll()
+    @messageViews = []
     @loadInitialMessages()
 
   loadInitialMessages: ->
@@ -10,23 +11,25 @@ class Trampfire.TranscriptView extends Backbone.View
     transcript = new Trampfire.Transcript(messages)
     transcript.each (message) => @chatMessageReceived(message)
 
+  # This is a bit of a hack.  Need a SystemMessage class or something.
   systemMessageReceived: (text) ->
-    @appendToTranscript("System", text)
-
-  updateMessageReceived: (message) ->
-    @updateTranscript(message.get("id"), message.get("data"))
+    messageView = new Trampfire.MessageView(transcript: $(@el))
+    messageView.appendToTranscript("System", text)
 
   chatMessageReceived: (message) ->
-    author = "#{ message.user().get("display_name") } @ #{ message.tag().get("name") }"
-    text = message.get("data")
-    @appendToTranscript(author, text, message.get("id"))
+    messageView = new Trampfire.MessageView(message: message, transcript: $(@el))
+    messageView.render()
 
-  appendToTranscript: (author, text, id) ->
-    $(@el).append(JST["templates/message"](id: id, author: author, text: text))
+    @messageViews.push messageView
     @autoscroll()
 
-  updateTranscript: (id, text) ->
-    @$("dl[data-id='#{ id }'] dd").html(text)
+  updateMessageReceived: (message) ->
+    @findMessageViewForId(message.get("id")).updateHTML(message.get("data"))
+    @autoscroll()
+
+  findMessageViewForId: (id) ->
+    _.detect @messageViews, (messageView) ->
+      messageView.isForId(id)
 
   autoscroll: ->
     $("body").scrollTop($(document).height())
