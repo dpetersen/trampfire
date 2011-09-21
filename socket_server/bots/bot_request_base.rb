@@ -24,6 +24,14 @@ class BotRequestBase
 
   protected
 
+  def public_asset_path(path)
+    "/bots/#{bot_lowercase_name}/public#{path}"
+  end
+
+  def bot_lowercase_name
+    self.class.name.underscore.gsub(/_bot_request/, '')
+  end
+
   def within_subprocess(&block)
     subprocess = Process.fork  do
       connect_asyncronous_pipe

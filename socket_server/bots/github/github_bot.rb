@@ -50,8 +50,7 @@ class GithubBotRequest < BotRequestBase
 protected
 
   def octocatize_message(message)
-    octocat_image_url = "http://th00.deviantart.net/fs70/150/i/2011/178/a/f/octocat_by_rstovall-d3k6a7n.jpg"
-    %{<a href="#{message}"><img src="#{octocat_image_url}" width="50" height="50" />#{message}</a>}
+    %{<a href="#{message}"><img src="#{public_asset_path("/images/octocat.png")}" width="50" height="50" />#{message}</a>}
   end
 
   def build_view_hash_for_commit(repository_owner, repository_name, sha)
