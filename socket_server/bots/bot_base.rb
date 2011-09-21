@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), 'pipe_connector')
+require File.join(File.dirname(__FILE__), '../lib/interprocess_message')
 require 'active_support/core_ext'
 require 'json'
 
@@ -50,39 +51,40 @@ protected
   def wait_for_incoming
     puts "Waiting"
 
-    message_string = @incoming_pipe.gets.strip!
-    message_hash = JSON.parse(message_string)
+    interprocess_message_string = @incoming_pipe.gets.strip!
+    interprocess_message = InterprocessMessage.from_json(interprocess_message_string)
 
-    if message_hash["bot"] == self.class.to_s
-      message_hash["data"] = bot_request_class_instance(message_hash).handle_bot_message
-      @asynchronous_pipe.puts message_hash.to_json
-      @asynchronous_pipe.flush
-    else
-      message_string = process(message_hash, message_string)
+    if interprocess_message.type == "chat"
+      message_hash = interprocess_message.message
 
-      connect_outgoing_pipe
-      @outgoing_pipe.puts message_string
-      @outgoing_pipe.flush
+      if message_hash["bot"] == self.class.to_s
+        # TODO: Need IPM in these, too
+        message_hash["data"] = bot_request_class_instance(message_hash).handle_bot_message
+        @asynchronous_pipe.puts message_hash.to_json
+        @asynchronous_pipe.flush
+      else
+        message_hash = process(message_hash)
+        interprocess_message = InterprocessMessage.new(:chat, message_hash: message_hash)
+
+        connect_outgoing_pipe
+        @outgoing_pipe.puts interprocess_message.to_json
+        @outgoing_pipe.flush
+      end
+    # TODO: Need to move "bot" messages into a different type of IPM
+    else raise "Unknown InterprocessMessage type: '#{interprocess_message.type}'"
     end
 
     wait_for_incoming
   end
 
-  def process(message_hash, original_json)
+  def process(message_hash)
     modified_message = bot_request_class_instance(message_hash).process
 
     if modified_message != nil && modified_message != message_hash["data"]
-      serialize_message_hash(
-        message_hash,
-        modified_message
-      )
-    else original_json
+      message_hash["data"] = modified_message
     end
-  end
 
-  def serialize_message_hash(message_hash, data)
-    message_hash["data"] = data
-    message_hash.to_json
+    message_hash
   end
 
   def bot_request_class_instance(message_hash)
