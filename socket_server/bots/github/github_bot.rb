@@ -1,19 +1,38 @@
 require '../bot_base'
 require '../bot_request_base'
 require './github_api_helper'
-require 'digest/md5'
 
 require 'pry'
 
 class GithubBotRequest < BotRequestBase
+  def handle_bot_message
+    post_commit_object = JSON.parse(message)
+
+    repository_owner = post_commit_object["repository"]["owner"]["name"]
+    repository_name = post_commit_object["repository"]["name"]
+
+    message_html = "<h4>Changes have been pushed to '#{repository_name}'</h4>"
+
+    post_commit_object["commits"].each do |commit_object|
+      sha = commit_object["id"]
+      api =  GithubApiHelper.new(config["username"], config["api_key"])
+      commit = api.commit(repository_owner, repository_name, sha)
+
+      view_hash = build_view_hash_for_commit(repository_owner, repository_name, sha)
+      message_html << render_view("commit", view_hash)
+    end
+
+    message_html
+  end
+
   def process
     if message =~ /^http(?:s)?:\/\/(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)\/commit\/([a-f0-9]{40})$/
-      user = $1
-      repo = $2
+      repository_owner = $1
+      repository_name = $2
       sha = $3
 
       within_subprocess do
-        view_hash = build_view_hash_for_commit(user, repo, sha)
+        view_hash = build_view_hash_for_commit(repository_owner, repository_name, sha)
         html = render_view("commit", view_hash)
 
         message_hash["data"] = html
@@ -32,24 +51,14 @@ protected
     %{<a href="#{message}"><img src="#{octocat_image_url}" width="50" height="50" />#{message}</a>}
   end
 
-  def build_view_hash_for_commit(user_name, repo_name, sha)
-    github =  GithubApiHelper.new(config["username"], config["api_key"])
-    repo = github.repo(user_name, repo_name)
-    commit = github.commit(user_name, repo_name, sha)
-    md5 = Digest::MD5.hexdigest(commit["author"]["email"])
-    gravatar_url = "http://gravatar.com/avatar/#{md5}"
+  def build_view_hash_for_commit(repository_owner, repository_name, sha)
+    api =  GithubApiHelper.new(config["username"], config["api_key"])
+    commit = api.commit(repository_owner, repository_name, sha)
 
     {
-      repo_name: repo["name"],
-      repo_path: repo["url"],
-      commit_author: commit["author"]["name"],
-      gravatar_url: gravatar_url,
-      commit_url: "http://github.com#{commit["url"]}",
-      commit_message: commit["message"],
-      sha: sha,
-      user_path: "http://github.com/#{commit["author"]["login"]}",
-      repo_owner: user_name,
-      repo_owner_path: "http://github.com/#{user_name}"
+      commit: commit,
+      repository: commit.repository,
+      author: commit.author
     }
   end
 end

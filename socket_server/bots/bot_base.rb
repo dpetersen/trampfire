@@ -1,7 +1,10 @@
+require File.join(File.dirname(__FILE__), 'pipe_connector')
 require 'active_support/core_ext'
 require 'json'
 
 class BotBase
+  include PipeConnector
+
   BotsRoot = File.dirname(__FILE__)
 
   def self.inherited(subclass)
@@ -18,6 +21,7 @@ class BotBase
   end
 
   def initialize
+    connect_asyncronous_pipe
     connect_incoming_pipe
     wait_for_incoming
   end
@@ -46,38 +50,43 @@ protected
   def wait_for_incoming
     puts "Waiting"
 
-    message = @incoming_pipe.gets.strip!
-    puts "Got message: #{message}"
-    message = process(message)
+    message_string = @incoming_pipe.gets.strip!
+    message_hash = JSON.parse(message_string)
 
-    puts "Message modded to: #{message}"
-    connect_outgoing_pipe
-    @outgoing_pipe.puts message
-    @outgoing_pipe.flush
+    if message_hash["bot"] == self.class.to_s
+      message_hash["data"] = bot_request_class_instance(message_hash).handle_bot_message
+      @asynchronous_pipe.puts message_hash.to_json
+      @asynchronous_pipe.flush
+    else
+      message_string = process(message_hash, message_string)
+
+      connect_outgoing_pipe
+      @outgoing_pipe.puts message_string
+      @outgoing_pipe.flush
+    end
 
     wait_for_incoming
   end
 
-  def process(message_json)
-    message_hash = deserialize_message_json(message_json)
-    request_klass = Object.const_get(self.class.to_s + "Request")
-    modified_message = request_klass.new(self.class, message_hash).process
+  def process(message_hash, original_json)
+    modified_message = bot_request_class_instance(message_hash).process
 
     if modified_message != nil && modified_message != message_hash["data"]
       serialize_message_hash(
         message_hash,
         modified_message
       )
-    else message_json
+    else original_json
     end
-  end
-
-  def deserialize_message_json(message)
-    JSON.parse(message)
   end
 
   def serialize_message_hash(message_hash, data)
     message_hash["data"] = data
     message_hash.to_json
+  end
+
+  def bot_request_class_instance(message_hash)
+    request_klass = Object.const_get(self.class.to_s + "Request")
+    request_klass.new(self.class, message_hash)
   end
 end

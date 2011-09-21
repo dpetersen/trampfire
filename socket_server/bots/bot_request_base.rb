@@ -1,6 +1,9 @@
+require File.join(File.dirname(__FILE__), 'pipe_connector')
 require 'erubis'
 
 class BotRequestBase
+  include PipeConnector
+
   attr_reader :parent_bot_class
   attr_accessor :message_hash, :message
 
@@ -27,15 +30,5 @@ class BotRequestBase
       yield
     end
     Process.detach(subprocess)
-  end
-
-  def connect_asyncronous_pipe
-    return if @asynchronous_pipe
-
-    path = "../asynchronous_incoming_pipe_path"
-    if File.exist?(path)
-      @asynchronous_pipe = open(path, "w+")
-    else raise "Can't connect to asynchronous named pipe!"
-    end
   end
 end

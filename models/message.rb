@@ -14,7 +14,8 @@ class Message < ActiveRecord::Base
   end
 
   def type
-    if user.present? then "chat"
+    if bot.present? then "bot"
+    elsif user.present? then "chat"
     else "system"
     end
   end
@@ -37,7 +38,7 @@ class Message < ActiveRecord::Base
   # See: https://github.com/rails/rails/issues/576
   def as_json(options = {})
     super(
-      only: [ :id, :original_message, :created_at ],
+      only: [ :id, :original_message, :created_at, :bot ],
       methods: [ :type, :data, :user_hack, :tag_hack ]
     )
   end

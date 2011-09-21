@@ -51,7 +51,7 @@ EventMachine.run do
       BotManager.process(message)
       message.save
 
-      AllClients.client_broadcast message.as_json.to_json
+      AllClients.client_broadcast message
     end
   end
 

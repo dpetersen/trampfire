@@ -10,7 +10,10 @@ module AsynchronousMessageHandler
       message = Message.find(message_object["id"])
       message.update_attribute(:final_message, message_object["data"])
 
-      AllClients.update_broadcast message
+      if message.type == "bot" then AllClients.client_broadcast(message)
+      else AllClients.update_broadcast(message)
+      end
+
     rescue EOFError
     end
   end 

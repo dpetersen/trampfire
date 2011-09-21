@@ -26,7 +26,7 @@ class Clients
   end
 
   def client_broadcast(message)
-    broadcast message.as_json
+    broadcast message.as_json.to_json
   end
 
   def update_broadcast(message)
@@ -34,7 +34,7 @@ class Clients
   end
 
   def roster_update
-    broadcast(self.to_json)
+    broadcast self.to_json
   end
 
 protected

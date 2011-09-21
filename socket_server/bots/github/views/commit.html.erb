@@ -1,22 +1,26 @@
 <div class="github-bot">
   <p class="commit-message">
-    <a href="<%= repo_owner_path %>"><%= repo_owner %></a>
+    <a href="<%= repository.owner_path %>"><%= repository.owner_login %></a>
     /
-    <a href="<%= repo_path %>"><%= repo_name %></a>
+    <a href="<%= repository.url %>"><%= repository.name %></a>
     <br />
-    <%= commit_message %>
+    <%= commit.message %>
   </p>
   <div class="commit-meta">
     <span class="sha-block">
       commit
       <span class="sha">
-        <a href="<%= commit_url %>"><%= sha %></a>
+        <a href="<%= commit.url %>"><%= commit.sha %></a>
       </span>
     </span>
     <div class="authorship">
-      <img src="<%= gravatar_url %>" width="24" height="24" />
+      <img src="<%= author.gravatar_url %>" width="24" height="24" />
       <span class="author-name">
-        <a href="<%= user_path %>"><%= commit_author %></a>
+        <%- if author.is_github_user? %>
+          <a href="<%= author.profile_path %>"><%= author.name %></a>
+        <%- else %>
+          <%= author.name %>
+        <%- end %>
       </span>
       authored
     </div>

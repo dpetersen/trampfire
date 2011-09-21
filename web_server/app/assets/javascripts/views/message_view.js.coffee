@@ -4,7 +4,11 @@ class Trampfire.MessageView extends Backbone.View
     @transcript = @options.transcript
 
   render: ->
-    author = "#{ @message.user().get("display_name") } @ #{ @message.tag().get("name") }"
+    author = if @message.get("bot")?
+               @message.get("bot")
+            else 
+               "#{ @message.user().get("display_name") } @ #{ @message.tag().get("name") }"
+
     text = @message.get("data")
     @appendToTranscript(author, text, @message.get("id"))
 
