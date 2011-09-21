@@ -13,7 +13,9 @@ class Trampfire.MessageView extends Backbone.View
     @appendToTranscript(author, text, @message.get("id"))
 
   appendToTranscript: (author, text, id) ->
-    @el = @transcript.append(JST["templates/message"](id: id, author: author, text: text))
+    messageHTML = JST["templates/message"](id: id, author: author, text: text)
+    @transcript.append(messageHTML)
+    @el = @transcript.find("dl[data-id='#{id}']")
 
   isForId: (id) ->
     @message.get("id") == id
