@@ -18,7 +18,7 @@ class Commit < ActiveRecord::Base
   end
 
   def url
-    "http://github.com#{@url}"
+    "http://github.com#{attributes["url"]}"
   end
 
   def authored_by_github_user?

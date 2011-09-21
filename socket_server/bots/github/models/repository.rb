@@ -10,6 +10,6 @@ class Repository < ActiveRecord::Base
   end
 
   def owner_path
-    "http://github.com/#{@owner_login}"
+    "http://github.com/#{owner_login}"
   end
 end
