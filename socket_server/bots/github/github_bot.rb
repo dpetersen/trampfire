@@ -1,6 +1,9 @@
+require 'active_record'
+require 'logger'
+require './models/models'
 require '../bot_base'
 require '../bot_request_base'
-require './github_api_helper'
+require './lib/github_api_helper'
 
 require 'pry'
 
@@ -57,13 +60,25 @@ protected
 
     {
       commit: commit,
-      repository: commit.repository,
-      author: commit.author
+      repository: commit.repository
     }
   end
 end
 
 class GithubBot < BotBase
+  def initialize
+    ActiveRecord::Base.establish_connection(
+      :adapter  => "mysql2",
+      :host     => "localhost",
+      :username => "root",
+      :password => "",
+      :database => "github_bot_development",
+      :encoding => 'utf8'
+    )
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+    super 
+  end
 end
 
 GithubBot.new
