@@ -8,7 +8,7 @@ require './lib/github_api_helper'
 require 'pry'
 
 class GithubBotRequest < BotRequestBase
-  def handle_bot_message
+  handle_bot_event("post_commit") do
     within_subprocess do
       post_commit_object = JSON.parse(message)
 
@@ -32,6 +32,7 @@ class GithubBotRequest < BotRequestBase
     end
   end
 
+  # TODO rename this to something more apt, like process_user_initiated_message
   def process
     if message =~ /^http(?:s)?:\/\/(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)\/commit\/([a-f0-9]{40})$/
       repository_owner = $1

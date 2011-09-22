@@ -76,10 +76,15 @@ protected
   end
 
   def handle_bot_initiated_message(interprocess_message)
-    if interprocess_message.bot_name == self.class.to_s
-      new_bot_request_instance(interprocess_message.message).handle_bot_message
-    else raise "Got a bot-initiated message that wasn't addressed to me!"
-    end
+    event_name = interprocess_message.event_name
+    bot_name = interprocess_message.bot_name
+    raise "Got a bot-initiated message that wasn't addressed to me!" unless bot_name == self.class.to_s
+
+    bot_request = new_bot_request_instance(interprocess_message.message)
+    handler = bot_request_class.handler_for_event(event_name)
+    raise "I have no handler for the event: '#{event_name}'" unless handler
+
+    bot_request.instance_eval &handler
   end
 
   def process(message_hash)
@@ -92,8 +97,11 @@ protected
     message_hash
   end
 
+  def bot_request_class
+    Object.const_get(self.class.to_s + "Request")
+  end
+
   def new_bot_request_instance(message_hash)
-    request_klass = Object.const_get(self.class.to_s + "Request")
-    request_klass.new(self.class, message_hash)
+    bot_request_class.new(self.class, message_hash)
   end
 end
