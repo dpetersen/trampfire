@@ -26,7 +26,7 @@ class Trampfire.ChatView extends Backbone.View
   submitPressed: (event) ->
     if @enabled
       message = new Trampfire.Message
-      if message.set(type: 'chat', data: @outgoing.val(), tag: @activeTagName)
+      if message.set(type: 'user_initiated', data: @outgoing.val(), tag: @activeTagName)
         @removeErrorState()
         @trigger "chat:newMessage", message
       else @setErrorState()

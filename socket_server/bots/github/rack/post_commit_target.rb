@@ -12,10 +12,9 @@ module GithubBot
         begin
           message = Message.create(original_message: params[:payload], tag: Tag.first, bot: "GithubBot")
 
-          interprocess_message = InterprocessMessage.new(
-            :bot_initiated,
-            bot_name: "GithubBot",
-            event_name: "post_commit",
+          interprocess_message = BotInitiatedInterprocessMessage.new(
+            "GithubBot",
+            "post_commit",
             message: message
           )
 

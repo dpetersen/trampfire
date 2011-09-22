@@ -6,51 +6,78 @@ class InterprocessMessage
     bot_initiated: "bot_initiated"
   }
 
-  attr_accessor :type, :event, :message, :bot_name, :event_name
+  attr_accessor :type, :message
 
-  # Public: Create a new InterprocessMessage.
-  #
-  # type - A symbol defining the type, which should use TYPES constant.
-  # options - A hash of optional arguments.  Pass message OR message_hash (default: {}):
-  #           :message - A Message model instance.
-  #           :message_hash - A hash representation of a Message.
-  #           :bot_name - For bot_initiated events, which bot should handle.
-  #           :event_name - For bot_initiated events, what type of event is this.
-  #
-  # Returns the new InterprocessMessage.
-  def initialize(type, options = {})
-    self.type = TYPES[type]
+  # Should never be called directly.  This is a "virtual" class.
+  def initialize(options)
     self.message = options[:message_hash] if options[:message_hash]
     self.message = options[:message].as_json if options[:message]
-    self.bot_name = options[:bot_name].as_json if options[:bot_name]
-    self.event_name = options[:event_name].as_json if options[:event_name]
   end
 
   def self.from_json(json)
     object = JSON.parse(json)
 
-    if object["type"] == TYPES[:user_initiated]
-      self.new(:user_initiated, message_hash: object["message"])
-    elsif object["type"] == TYPES[:bot_initiated]
-      self.new(
-        :bot_initiated,
-        message_hash: object["message"],
-        bot_name: object["bot_name"],
-        event_name: object["event_name"]
+    case object["type"]
+    when TYPES[:user_initiated]
+      UserInitiatedInterprocessMessage.new(
+        message_hash: object["message"]
+      )
+    when TYPES[:bot_initiated]
+      BotInitiatedInterprocessMessage.new(
+        object["bot_name"],
+        object["event_name"],
+        message_hash: object["message"]
       )
     else raise "I can't reconstitute the InterprocessMessage #{json}"
     end
   end
 
-  def to_json
+  def to_hash
     base_hash = { type: type }
-
-    if type == TYPES[:bot_initiated]
-      base_hash.merge!(bot_name: bot_name, event_name: event_name)
-    end
-
     base_hash.merge!(message: message) if message
+    base_hash
+  end
 
-    base_hash.to_json
+  def to_json
+    to_hash.to_json
+  end
+end
+
+class UserInitiatedInterprocessMessage < InterprocessMessage
+  # Public: Create a new UserInitiatedInterprocessMessage.
+  #
+  # options - A hash of arguments.  Pass message OR message_hash:
+  #           :message - A Message model instance.
+  #           :message_hash - A hash representation of a Message.
+  #
+  # Returns the new UserInitiatedInterprocessMessage.
+  def initialize(options)
+    self.type = InterprocessMessage::TYPES[:user_initiated]
+    super(options)
+  end
+end
+
+class BotInitiatedInterprocessMessage < InterprocessMessage
+
+  attr_accessor :bot_name, :event_name
+
+  # Public: Create a new BotInitiatedInterprocessMessage.
+  #
+  # bot_name - The class name of the destination bot, as a string.
+  # event_name - The name of the event that the bot will handle.
+  # options - A hash of arguments.  Pass message OR message_hash:
+  #           :message - A Message model instance.
+  #           :message_hash - A hash representation of a Message.
+  #
+  # Returns the new BotInitiatedInterprocessMessage
+  def initialize(bot_name, event_name, options)
+    self.type = InterprocessMessage::TYPES[:bot_initiated]
+    self.bot_name = bot_name
+    self.event_name = event_name
+    super(options)
+  end
+
+  def to_json
+    self.to_hash.merge!(bot_name: bot_name, event_name: event_name).to_json
   end
 end

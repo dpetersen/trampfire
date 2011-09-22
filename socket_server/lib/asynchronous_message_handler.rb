@@ -11,10 +11,10 @@ module AsynchronousMessageHandler
       message = Message.find(interprocess_message.message["id"])
       message.update_attribute(:final_message, interprocess_message.message["data"])
 
-      case interprocess_message.type
-      when InterprocessMessage::TYPES[:bot_initiated]
+      case interprocess_message.class.name
+      when "BotInitiatedInterprocessMessage"
         AllClients.client_broadcast(message)
-      when InterprocessMessage::TYPES[:user_initiated]
+      when "UserInitiatedInterprocessMessage"
         AllClients.update_broadcast(message)
       else raise "Asynchronous InterprocessMessage is of unknown type: #{interprocess_message.inspect}"
       end

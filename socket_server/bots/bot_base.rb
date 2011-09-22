@@ -55,10 +55,10 @@ protected
     interprocess_message = InterprocessMessage.from_json(interprocess_message_string)
     message_hash = interprocess_message.message
 
-    case interprocess_message.type
-    when InterprocessMessage::TYPES[:user_initiated]
+    case interprocess_message.class.name
+    when "UserInitiatedInterprocessMessage"
       handle_user_initiated_message(interprocess_message)
-    when InterprocessMessage::TYPES[:bot_initiated]
+    when "BotInitiatedInterprocessMessage"
       handle_bot_initiated_message(interprocess_message)
     else raise "Unknown InterprocessMessage type: '#{interprocess_message.type}'"
     end
@@ -68,7 +68,7 @@ protected
 
   def handle_user_initiated_message(interprocess_message)
     message_hash = process(interprocess_message.message)
-    interprocess_message = InterprocessMessage.new(:user_initiated, message_hash: message_hash)
+    interprocess_message = UserInitiatedInterprocessMessage.new(message_hash: message_hash)
 
     connect_outgoing_pipe
     @outgoing_pipe.puts interprocess_message.to_json
