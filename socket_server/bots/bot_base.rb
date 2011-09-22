@@ -56,8 +56,8 @@ protected
     message_hash = interprocess_message.message
 
     case interprocess_message.type
-    when InterprocessMessage::TYPES[:chat]
-      handle_chat_message(interprocess_message)
+    when InterprocessMessage::TYPES[:user_initiated]
+      handle_user_initiated_message(interprocess_message)
     when InterprocessMessage::TYPES[:bot_initiated]
       handle_bot_initiated_message(interprocess_message)
     else raise "Unknown InterprocessMessage type: '#{interprocess_message.type}'"
@@ -66,9 +66,9 @@ protected
     wait_for_incoming
   end
 
-  def handle_chat_message(interprocess_message)
+  def handle_user_initiated_message(interprocess_message)
     message_hash = process(interprocess_message.message)
-    interprocess_message = InterprocessMessage.new(:chat, message_hash: message_hash)
+    interprocess_message = InterprocessMessage.new(:user_initiated, message_hash: message_hash)
 
     connect_outgoing_pipe
     @outgoing_pipe.puts interprocess_message.to_json

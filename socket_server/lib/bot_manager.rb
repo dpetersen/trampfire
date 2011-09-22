@@ -20,7 +20,7 @@ class BotManager
   end
 
   def process_message(message)
-    interprocess_message = InterprocessMessage.new(:chat, message: message)
+    interprocess_message = InterprocessMessage.new(:user_initiated, message: message)
     interprocess_message_string = pass_interprocess_message_through_bot_bus(interprocess_message)
 
     interprocess_message = InterprocessMessage.from_json(interprocess_message_string)

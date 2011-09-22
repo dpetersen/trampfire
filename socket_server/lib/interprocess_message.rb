@@ -2,7 +2,7 @@ require 'json'
 
 class InterprocessMessage
   TYPES = {
-    chat: "chat",
+    user_initiated: "user_initiated",
     bot_initiated: "bot_initiated"
   }
 
@@ -29,8 +29,8 @@ class InterprocessMessage
   def self.from_json(json)
     object = JSON.parse(json)
 
-    if object["type"] == TYPES[:chat]
-      self.new(:chat, message_hash: object["message"])
+    if object["type"] == TYPES[:user_initiated]
+      self.new(:user_initiated, message_hash: object["message"])
     elsif object["type"] == TYPES[:bot_initiated]
       self.new(
         :bot_initiated,

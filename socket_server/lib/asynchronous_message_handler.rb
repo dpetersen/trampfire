@@ -14,7 +14,7 @@ module AsynchronousMessageHandler
       case interprocess_message.type
       when InterprocessMessage::TYPES[:bot_initiated]
         AllClients.client_broadcast(message)
-      when InterprocessMessage::TYPES[:chat]
+      when InterprocessMessage::TYPES[:user_initiated]
         AllClients.update_broadcast(message)
       else raise "Asynchronous InterprocessMessage is of unknown type: #{interprocess_message.inspect}"
       end

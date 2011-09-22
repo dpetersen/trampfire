@@ -45,7 +45,7 @@ class GithubBotRequest < BotRequestBase
         html = render_view("commit", view_hash)
 
         message_hash["data"] = html
-        interprocess_message = InterprocessMessage.new(:chat, message_hash: message_hash)
+        interprocess_message = InterprocessMessage.new(:user_initiated, message_hash: message_hash)
         @asynchronous_pipe.puts interprocess_message.to_json
         @asynchronous_pipe.flush
       end
