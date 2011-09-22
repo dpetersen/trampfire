@@ -7,6 +7,7 @@ module GithubBot
   module Rack
     class Preferences < Sinatra::Base
       include PipeConnector
+
       set :views, File.dirname(__FILE__) + '/views'
 
       get "/" do
@@ -14,22 +15,18 @@ module GithubBot
       end
 
       post "/watch" do
-        params[:repository_watch].inspect
+        interprocess_message = BotInitiatedInterprocessMessage.new(
+          "GithubBot",
+          "create_repository_watch",
+          message_hash: params[:repository_watch].to_json
+        )
+
+        github_bot_pipe = incoming_pipe_for_bot("github")
+        github_bot_pipe.puts interprocess_message.to_json
+        github_bot_pipe.flush
+
+        "Success...?"
       end
-
-      # post '/' do
-      #   begin
-      #     m = Message.create(original_message: params[:payload], tag: Tag.first, bot: "GithubBot")
-
-      #     github_bot_pipe = incoming_pipe_for_bot("github")
-      #     github_bot_pipe.puts m.as_json.to_json
-      #     github_bot_pipe.flush
-
-      #     m.inspect
-      #   rescue Exception => e
-      #     e.message
-      #   end
-      # end
     end
   end
 end
