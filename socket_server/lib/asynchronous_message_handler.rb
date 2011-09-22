@@ -5,15 +5,19 @@ module AsynchronousMessageHandler
 
   def notify_readable
     begin
-      message_string = @io.readline
-      message_object = JSON.parse(message_string)
-      message = Message.find(message_object["id"])
-      message.update_attribute(:final_message, message_object["data"])
+      interprocess_message_string = @io.readline
+      interprocess_message = InterprocessMessage.from_json(interprocess_message_string)
 
-      if message.type == "bot" then AllClients.client_broadcast(message)
-      else AllClients.update_broadcast(message)
+      message = Message.find(interprocess_message.message["id"])
+      message.update_attribute(:final_message, interprocess_message.message["data"])
+
+      case interprocess_message.type
+      when InterprocessMessage::TYPES[:bot_initiated]
+        AllClients.client_broadcast(message)
+      when InterprocessMessage::TYPES[:chat]
+        AllClients.update_broadcast(message)
+      else raise "Asynchronous InterprocessMessage is of unknown type: #{interprocess_message.inspect}"
       end
-
     rescue EOFError
     end
   end 

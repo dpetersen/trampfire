@@ -26,11 +26,11 @@ class Clients
   end
 
   def client_broadcast(message)
-    broadcast message.as_json.to_json
+    broadcast chat_json(message)
   end
 
   def update_broadcast(message)
-    broadcast message.as_json.merge(type: "update").to_json
+    broadcast update_json(message)
   end
 
   def roster_update
@@ -55,5 +55,19 @@ protected
       type: "system",
       data: message
     }.to_json
+  end
+
+  def chat_json(message)
+    message.
+      as_json.
+      merge(type: "chat").
+      to_json
+  end
+
+  def update_json(message)
+    message.
+      as_json.
+      merge(type: "update").
+      to_json
   end
 end

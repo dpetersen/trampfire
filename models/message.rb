@@ -13,10 +13,10 @@ class Message < ActiveRecord::Base
     )
   end
 
-  def type
-    if bot.present? then "bot"
-    elsif user.present? then "chat"
-    else "system"
+  def author
+    if bot.present? then bot
+    elsif user.present? then user.display_name
+    else "System"
     end
   end
 
@@ -39,7 +39,7 @@ class Message < ActiveRecord::Base
   def as_json(options = {})
     super(
       only: [ :id, :original_message, :created_at, :bot ],
-      methods: [ :type, :data, :user_hack, :tag_hack ]
+      methods: [ :author, :data, :user_hack, :tag_hack ]
     )
   end
 end
