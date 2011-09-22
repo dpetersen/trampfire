@@ -58,10 +58,7 @@ protected
       message_hash = interprocess_message.message
 
       if message_hash["bot"] == self.class.to_s
-        # TODO: Need IPM in these, too
-        message_hash["data"] = bot_request_class_instance(message_hash).handle_bot_message
-        @asynchronous_pipe.puts message_hash.to_json
-        @asynchronous_pipe.flush
+        bot_request_class_instance(message_hash).handle_bot_message
       else
         message_hash = process(message_hash)
         interprocess_message = InterprocessMessage.new(:chat, message_hash: message_hash)

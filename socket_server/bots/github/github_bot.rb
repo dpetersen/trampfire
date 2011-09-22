@@ -9,23 +9,27 @@ require 'pry'
 
 class GithubBotRequest < BotRequestBase
   def handle_bot_message
-    post_commit_object = JSON.parse(message)
+    within_subprocess do
+      post_commit_object = JSON.parse(message)
 
-    repository_owner = post_commit_object["repository"]["owner"]["name"]
-    repository_name = post_commit_object["repository"]["name"]
+      repository_owner = post_commit_object["repository"]["owner"]["name"]
+      repository_name = post_commit_object["repository"]["name"]
 
-    message_html = "<h4>Changes have been pushed to '#{repository_name}'</h4>"
+      message_html = "<h4>Changes have been pushed to '#{repository_name}'</h4>"
 
-    post_commit_object["commits"].each do |commit_object|
-      sha = commit_object["id"]
-      api =  GithubApiHelper.new(config["username"], config["api_key"])
-      commit = api.commit(repository_owner, repository_name, sha)
+      post_commit_object["commits"].each do |commit_object|
+        sha = commit_object["id"]
+        api =  GithubApiHelper.new(config["username"], config["api_key"])
+        commit = api.commit(repository_owner, repository_name, sha)
 
-      view_hash = build_view_hash_for_commit(repository_owner, repository_name, sha)
-      message_html << render_view("commit", view_hash)
+        view_hash = build_view_hash_for_commit(repository_owner, repository_name, sha)
+        message_html << render_view("commit", view_hash)
+      end
+
+      message_hash["data"] = message_html
+      @asynchronous_pipe.puts message_hash.to_json
+      @asynchronous_pipe.flush
     end
-
-    message_html
   end
 
   def process
