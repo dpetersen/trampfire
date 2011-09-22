@@ -53,29 +53,37 @@ protected
 
     interprocess_message_string = @incoming_pipe.gets.strip!
     interprocess_message = InterprocessMessage.from_json(interprocess_message_string)
+    message_hash = interprocess_message.message
 
-    if interprocess_message.type == "chat"
-      message_hash = interprocess_message.message
-
-      if message_hash["bot"] == self.class.to_s
-        bot_request_class_instance(message_hash).handle_bot_message
-      else
-        message_hash = process(message_hash)
-        interprocess_message = InterprocessMessage.new(:chat, message_hash: message_hash)
-
-        connect_outgoing_pipe
-        @outgoing_pipe.puts interprocess_message.to_json
-        @outgoing_pipe.flush
-      end
-    # TODO: Need to move "bot" messages into a different type of IPM
+    case interprocess_message.type
+    when InterprocessMessage::TYPES[:chat]
+      handle_chat_message(interprocess_message)
+    when InterprocessMessage::TYPES[:bot_initiated]
+      handle_bot_initiated_message(interprocess_message)
     else raise "Unknown InterprocessMessage type: '#{interprocess_message.type}'"
     end
 
     wait_for_incoming
   end
 
+  def handle_chat_message(interprocess_message)
+    message_hash = process(interprocess_message.message)
+    interprocess_message = InterprocessMessage.new(:chat, message_hash: message_hash)
+
+    connect_outgoing_pipe
+    @outgoing_pipe.puts interprocess_message.to_json
+    @outgoing_pipe.flush
+  end
+
+  def handle_bot_initiated_message(interprocess_message)
+    if interprocess_message.bot_name == self.class.to_s
+      new_bot_request_instance(interprocess_message.message).handle_bot_message
+    else raise "Got a bot-initiated message that wasn't addressed to me!"
+    end
+  end
+
   def process(message_hash)
-    modified_message = bot_request_class_instance(message_hash).process
+    modified_message = new_bot_request_instance(message_hash).process
 
     if modified_message != nil && modified_message != message_hash["data"]
       message_hash["data"] = modified_message
@@ -84,7 +92,7 @@ protected
     message_hash
   end
 
-  def bot_request_class_instance(message_hash)
+  def new_bot_request_instance(message_hash)
     request_klass = Object.const_get(self.class.to_s + "Request")
     request_klass.new(self.class, message_hash)
   end

@@ -12,7 +12,12 @@ module GithubBot
         begin
           message = Message.create(original_message: params[:payload], tag: Tag.first, bot: "GithubBot")
 
-          interprocess_message = InterprocessMessage.new(:chat, message: message)
+          interprocess_message = InterprocessMessage.new(
+            :bot_initiated,
+            bot_name: "GithubBot",
+            event_name: "post_commit",
+            message: message
+          )
 
           github_bot_pipe = incoming_pipe_for_bot("github")
           github_bot_pipe.puts interprocess_message.to_json
