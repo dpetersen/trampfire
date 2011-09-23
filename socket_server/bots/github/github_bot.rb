@@ -108,32 +108,43 @@ class GithubBot < BotBase
 
     response_pipe_path = create_anonymous_pipe
 
-    # TODO need one message per project!
-    message_creation_interprocess_message = MessageFactoryInterprocessMessage.new(
-      response_pipe_path,
-      message_hash: {
-        tag_name: "F/ Interactive",
-        original_message: "Something about pull requests here",
-        bot: "GithubBot"
-      }
-    )
+    pull_requests.keys.each do |tag_name|
+      html = ""
+      pull_requests[tag_name].each do |pull_request|
+        title = pull_request["title"]
+        pull_requestor = pull_request["user"]["name"]
+        project = "#{pull_request["base"]["user"]["name"]}/#{pull_request["base"]["repository"]["name"]}"
 
-    message_factory_pipe.puts message_creation_interprocess_message.to_json
-    message_factory_pipe.flush
+        html << "<strong>#{title}</strong>"
+        html << " from #{pull_requestor}"
+        html << " in project #{project}"
+        html << "<br />"
+      end
 
-    response_pipe = connect_named_pipe(response_pipe_path)
-    message_string = response_pipe.gets
+      message_creation_interprocess_message = MessageFactoryInterprocessMessage.new(
+        response_pipe_path,
+        message_hash: {
+          tag_name: tag_name,
+          original_message: html,
+          bot: "GithubBot"
+        }
+      )
 
-    message_object = JSON.parse(message_string)
-    message_object["data"] = "<h1>#{message_object["data"]}</h1>"
+      message_factory_pipe.puts message_creation_interprocess_message.to_json
+      message_factory_pipe.flush
 
-    interprocess_message = BotInitiatedInterprocessMessage.new(
-      "GitHubBot",
-      "pull_requests",
-      message_hash: message_object
-    )
-    @asynchronous_pipe.puts interprocess_message.to_json
-    @asynchronous_pipe.flush
+      response_pipe = connect_named_pipe(response_pipe_path)
+      message_string = response_pipe.gets
+
+      message_object = JSON.parse(message_string)
+      interprocess_message = BotInitiatedInterprocessMessage.new(
+        "GitHubBot",
+        "pull_requests",
+        message_hash: message_object
+      )
+      @asynchronous_pipe.puts interprocess_message.to_json
+      @asynchronous_pipe.flush
+    end
   end
 end
 
