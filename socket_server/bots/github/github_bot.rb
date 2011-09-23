@@ -93,7 +93,11 @@ class GithubBot < BotBase
     )
     ActiveRecord::Base.logger = Logger.new(STDOUT)
 
-    super 
+    super
+  end
+
+  periodically(1) do
+    puts "HEY THERE"
   end
 end
 

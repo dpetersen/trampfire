@@ -1,10 +1,12 @@
 require File.join(File.dirname(__FILE__), 'pipe_connector')
+require File.join(File.dirname(__FILE__), 'subprocessor')
 require File.join(File.dirname(__FILE__), '../lib/interprocess_message')
 require 'active_support/core_ext'
 require 'json'
 
 class BotBase
   include PipeConnector
+    include Subprocessor
 
   BotsRoot = File.dirname(__FILE__)
 
@@ -21,13 +23,37 @@ class BotBase
     @config
   end
 
+  def self.periodically(seconds, &block)
+    @periodic_tasks ||= []
+    @periodic_tasks << [seconds, block]
+  end
+
+
   def initialize
+    fork_periodic_tasks
     connect_asyncronous_pipe
     connect_incoming_pipe
     wait_for_incoming
   end
 
 protected
+
+  def fork_periodic_tasks
+    return unless periodic_tasks
+
+    periodic_tasks.each do |seconds, task_block|
+      within_subprocess do
+        loop do
+          sleep seconds
+          instance_eval &task_block
+        end
+      end
+    end
+  end
+
+  def periodic_tasks
+    self.class.instance_variable_get(:"@periodic_tasks")
+  end
 
   def connect_incoming_pipe
     path = "incoming"

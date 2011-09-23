@@ -1,8 +1,10 @@
+require File.join(File.dirname(__FILE__), 'subprocessor')
 require File.join(File.dirname(__FILE__), 'pipe_connector')
 require 'erubis'
 
 class BotRequestBase
   include PipeConnector
+  include Subprocessor
 
   attr_reader :parent_bot_class
   attr_accessor :message_hash, :message
@@ -39,13 +41,5 @@ class BotRequestBase
 
   def bot_lowercase_name
     self.class.name.underscore.gsub(/_bot_request/, '')
-  end
-
-  def within_subprocess(&block)
-    subprocess = Process.fork  do
-      connect_asyncronous_pipe
-      yield
-    end
-    Process.detach(subprocess)
   end
 end
