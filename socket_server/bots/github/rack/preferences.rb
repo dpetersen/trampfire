@@ -11,6 +11,22 @@ module GithubBot
       set :views, File.dirname(__FILE__) + '/views'
 
       get "/" do
+        response_pipe_path = create_anonymous_pipe
+        response_pipe = connect_named_pipe(response_pipe_path)
+
+        interprocess_message = BotInitiatedInterprocessMessage.new(
+          "GithubBot",
+          "fetch_repository_watches",
+          response_pipe_path: response_pipe_path
+        )
+
+        github_bot_pipe = incoming_pipe_for_bot("github")
+        github_bot_pipe.puts interprocess_message.to_json
+        github_bot_pipe.flush
+
+        puts "About to wait for response at #{response_pipe.inspect}"
+        @repository_watches = JSON.parse(response_pipe.gets)
+
         haml :preferences
       end
 

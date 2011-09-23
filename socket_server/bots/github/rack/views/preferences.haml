@@ -1,3 +1,8 @@
+%h3 Current watched repositories:
+%ul
+  - @repository_watches.each do |repository_watch|
+    %li Repository: #{repository_watch["owner_login"]}/#{repository_watch["repository_name"]}, Tag: #{repository_watch["destination_tag_name"]}
+
 %form{ action: "/bots/github/preferences/watch", method: "post" }
   %label Owner Name
   %input.medium{ type: "text", name: "repository_watch[owner_login]" }

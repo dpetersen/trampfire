@@ -19,7 +19,7 @@ class BotRequestBase
   def initialize(parent_bot_class, message_hash)
     @parent_bot_class = parent_bot_class
     self.message_hash = message_hash
-    self.message = message_hash["data"]
+    self.message = message_hash["data"] if message_hash
   end
 
   def config

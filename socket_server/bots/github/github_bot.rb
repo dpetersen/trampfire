@@ -39,6 +39,10 @@ class GithubBotRequest < BotRequestBase
     repository_watch.as_json(methods: :errors).to_json
   end
 
+  handle_bot_event("fetch_repository_watches") do
+    RepositoryWatch.all.as_json.to_json
+  end
+
   # TODO rename this to something more apt, like process_user_initiated_message
   def process
     if message =~ /^http(?:s)?:\/\/(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)\/commit\/([a-f0-9]{40})$/
