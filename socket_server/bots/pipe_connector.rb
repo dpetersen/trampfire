@@ -17,12 +17,19 @@ module PipeConnector
     )
   end
 
-protected
-
-  def connect_named_pipe(path, failure_message)
+  def connect_named_pipe(path, failure_message = nil)
     if File.exist?(path)
       open(path, "w+")
-    else raise failure_message
+    else raise failure_message || "Can't connect to named pipe: '#{path}'"
     end
   end
+
+  def create_anonymous_pipe
+    # TODO: Need to do something better than this
+    path = "/tmp/#{Time.now.to_i}"
+    `mkfifo #{path}`
+    path
+  end
+
+protected
 end

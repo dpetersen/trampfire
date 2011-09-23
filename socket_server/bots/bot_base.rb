@@ -84,7 +84,13 @@ protected
     handler = bot_request_class.handler_for_event(event_name)
     raise "I have no handler for the event: '#{event_name}'" unless handler
 
-    bot_request.instance_eval &handler
+    handler_response = bot_request.instance_eval &handler
+
+    if interprocess_message.response_pipe_path
+      response_pipe = connect_named_pipe(interprocess_message.response_pipe_path)
+      response_pipe.puts handler_response
+      response_pipe.flush
+    end
   end
 
   def process(message_hash)

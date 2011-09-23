@@ -26,7 +26,8 @@ class InterprocessMessage
       BotInitiatedInterprocessMessage.new(
         object["bot_name"],
         object["event_name"],
-        message_hash: object["message"]
+        message_hash: object["message"],
+        response_pipe_path: object["response_pipe_path"]
       )
     else raise "I can't reconstitute the InterprocessMessage #{json}"
     end
@@ -60,6 +61,7 @@ end
 class BotInitiatedInterprocessMessage < InterprocessMessage
 
   attr_accessor :bot_name, :event_name
+  attr_accessor :response_pipe_path
 
   # Public: Create a new BotInitiatedInterprocessMessage.
   #
@@ -68,16 +70,19 @@ class BotInitiatedInterprocessMessage < InterprocessMessage
   # options - A hash of arguments.  Pass message OR message_hash:
   #           :message - A Message model instance.
   #           :message_hash - A hash representation of a Message.
+  #           :response_pipe_path - A path to a named pipe where
+  #             the sender will be awaiting a response.
   #
   # Returns the new BotInitiatedInterprocessMessage
   def initialize(bot_name, event_name, options)
     self.type = InterprocessMessage::TYPES[:bot_initiated]
     self.bot_name = bot_name
     self.event_name = event_name
+    self.response_pipe_path = options[:response_pipe_path] if options[:response_pipe_path]
     super(options)
   end
 
   def to_json
-    self.to_hash.merge!(bot_name: bot_name, event_name: event_name).to_json
+    self.to_hash.merge!(bot_name: bot_name, event_name: event_name, response_pipe_path: response_pipe_path).to_json
   end
 end

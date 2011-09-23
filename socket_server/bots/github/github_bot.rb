@@ -35,7 +35,8 @@ class GithubBotRequest < BotRequestBase
 
   handle_bot_event("create_repository_watch") do
     repository_watch_attributes = JSON.parse(message_hash)
-    RepositoryWatch.create!(repository_watch_attributes)
+    repository_watch = RepositoryWatch.create(repository_watch_attributes)
+    repository_watch.as_json(methods: :errors).to_json
   end
 
   # TODO rename this to something more apt, like process_user_initiated_message
