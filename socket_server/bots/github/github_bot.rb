@@ -4,6 +4,7 @@ require './models/models'
 require '../bot_base'
 require '../bot_request_base'
 require './lib/github_api_helper'
+require './lib/pull_request_checker'
 
 require 'pry'
 
@@ -96,8 +97,43 @@ class GithubBot < BotBase
     super
   end
 
-  periodically(1) do
-    puts "HEY THERE"
+  periodically(60) do
+    # TODO don't forget to nuke this before commit...
+    sleep 5
+    PullRequest.destroy_all
+
+    api = GithubApiHelper.new(config["username"], config["api_key"])
+    pull_requests = PullRequestChecker.new(api).new_pull_requests
+    puts pull_requests.inspect
+
+    response_pipe_path = create_anonymous_pipe
+
+    # TODO need one message per project!
+    message_creation_interprocess_message = MessageFactoryInterprocessMessage.new(
+      response_pipe_path,
+      message_hash: {
+        tag_name: "F/ Interactive",
+        original_message: "Something about pull requests here",
+        bot: "GithubBot"
+      }
+    )
+
+    message_factory_pipe.puts message_creation_interprocess_message.to_json
+    message_factory_pipe.flush
+
+    response_pipe = connect_named_pipe(response_pipe_path)
+    message_string = response_pipe.gets
+
+    message_object = JSON.parse(message_string)
+    message_object["data"] = "<h1>#{message_object["data"]}</h1>"
+
+    interprocess_message = BotInitiatedInterprocessMessage.new(
+      "GitHubBot",
+      "pull_requests",
+      message_hash: message_object
+    )
+    @asynchronous_pipe.puts interprocess_message.to_json
+    @asynchronous_pipe.flush
   end
 end
 

@@ -3,7 +3,8 @@ require 'json'
 class InterprocessMessage
   TYPES = {
     user_initiated: "user_initiated",
-    bot_initiated: "bot_initiated"
+    bot_initiated: "bot_initiated",
+    message_factory: "message_factory"
   }
 
   attr_accessor :type, :message
@@ -28,6 +29,11 @@ class InterprocessMessage
         object["event_name"],
         message_hash: object["message"],
         response_pipe_path: object["response_pipe_path"]
+      )
+    when TYPES[:message_factory]
+      MessageFactoryInterprocessMessage.new(
+        object["response_pipe_path"],
+        message_hash: object["message"]
       )
     else raise "I can't reconstitute the InterprocessMessage #{json}"
     end
@@ -84,5 +90,25 @@ class BotInitiatedInterprocessMessage < InterprocessMessage
 
   def to_json
     self.to_hash.merge!(bot_name: bot_name, event_name: event_name, response_pipe_path: response_pipe_path).to_json
+  end
+end
+
+class MessageFactoryInterprocessMessage < InterprocessMessage
+  attr_accessor :response_pipe_path
+
+  # Public: Create a new BotInitiatedInterprocessMessage.
+  #
+  # response_pipe_path: A path to a named pipe where the requestor
+  #   will be awaiting the created Message JSON.
+  #
+  # Returns the new MessageFactoryInterprocessMessage
+  def initialize(response_pipe_path, options)
+    self.type = InterprocessMessage::TYPES[:message_factory]
+    self.response_pipe_path = response_pipe_path
+    super(options)
+  end
+
+  def to_json
+    self.to_hash.merge!(response_pipe_path: response_pipe_path).to_json
   end
 end

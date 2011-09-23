@@ -34,6 +34,16 @@ class Message < ActiveRecord::Base
     tag.as_json
   end
 
+  # Associate with a Tag by name.  Intended to be called through the
+  # MessageFactoryHandler by bots who know names but not ids.
+  #
+  # tag_name - Name of a tag in the database.
+  #
+  # Returns nothing.
+  def tag_name=(tag_name)
+    self.tag = Tag.find_by_name!(tag_name)
+  end
+
   # Can't use 'include' here because it won't call as_json on children
   # See: https://github.com/rails/rails/issues/576
   def as_json(options = {})

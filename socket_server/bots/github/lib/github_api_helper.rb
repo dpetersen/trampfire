@@ -27,6 +27,10 @@ class GithubApiHelper
     commit
   end
 
+  def pull_requests(repository_owner, repository_name)
+    pull_requests_object = make_request("/api/v2/json/pulls/#{repository_owner}/#{repository_name}")
+  end
+
   def make_request(path)
     http = Net::HTTP.new('github.com', 443)
     http.use_ssl = true

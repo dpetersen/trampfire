@@ -23,6 +23,10 @@ class BotBase
     @config
   end
 
+  def config
+    self.class.config
+  end
+
   def self.periodically(seconds, &block)
     @periodic_tasks ||= []
     @periodic_tasks << [seconds, block]
@@ -30,8 +34,8 @@ class BotBase
 
 
   def initialize
-    fork_periodic_tasks
     connect_asyncronous_pipe
+    fork_periodic_tasks
     connect_incoming_pipe
     wait_for_incoming
   end
@@ -44,8 +48,8 @@ protected
     periodic_tasks.each do |seconds, task_block|
       within_subprocess do
         loop do
-          sleep seconds
           instance_eval &task_block
+          sleep seconds
         end
       end
     end

@@ -9,6 +9,23 @@ module PipeConnector
     )
   end
 
+  def connect_message_factory_pipe
+    return if @message_factory_pipe
+
+    path = File.join(File.dirname(__FILE__), '../message_factory_incoming_pipe')
+    @message_factory_pipe = connect_named_pipe(
+      path,
+      "Can't connect to message factory named pipe at '#{path}'!"
+    )
+  end
+
+  # Fetch the connected message_factory_pipe.  This thing isn't necessarily
+  # ready when the bots come up, if they start faster than the socket server.
+  def message_factory_pipe
+    connect_message_factory_pipe
+    @message_factory_pipe
+  end
+
   def incoming_pipe_for_bot(bot_name)
     path = File.join(File.dirname(__FILE__), "activated/#{bot_name}/incoming")
     connect_named_pipe(
@@ -30,6 +47,4 @@ module PipeConnector
     `mkfifo #{path}`
     path
   end
-
-protected
 end

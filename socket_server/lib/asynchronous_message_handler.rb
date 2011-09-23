@@ -20,9 +20,9 @@ module AsynchronousMessageHandler
       end
     rescue EOFError
     end
-  end 
+  end
 
-  def unbind 
+  def unbind
     EM.next_tick do
       puts "*"*100
       puts "I lost my connection to the AsynchronousMessageHandler named pipe!"
