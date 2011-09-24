@@ -19,8 +19,9 @@ module PostCommitEventHandler
         end
 
         message_hash["data"] = message_html
-        interprocess_message = BotInitiatedInterprocessMessage.new("GitHubBot", "post_commit", message_hash: message_hash)
-        NamedPipe.asynchronous_pipe.write interprocess_message.to_json
+        BotInitiatedInterprocessMessage.new(
+          "GitHubBot", "post_commit", message_hash: message_hash
+        ).send_to_asynchronous_pipe
       else raise "Got a post-commit hook from unknown repo: '#{repository_owner}/#{repository_name}'"
       end
     end

@@ -10,8 +10,7 @@ module CommitChatMessageHandler
         html = render_view("commit", view_hash)
 
         message_hash["data"] = html
-        interprocess_message = UserInitiatedInterprocessMessage.new(message_hash: message_hash)
-        NamedPipe.asynchronous_pipe.write interprocess_message.to_json
+        UserInitiatedInterprocessMessage.new(message_hash: message_hash).send_to_asynchronous_pipe
       end
 
       octocatize_message(message)

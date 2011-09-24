@@ -68,11 +68,10 @@ protected
   def send_new_pull_requests(tag_name, html)
     message_object = MessageFromFactory.new(tag_name, "GithubBot", html).message
 
-    interprocess_message = BotInitiatedInterprocessMessage.new(
+    BotInitiatedInterprocessMessage.new(
       "github",
       "pull_requests",
       message_hash: message_object
-    )
-    NamedPipe.asynchronous_pipe.write interprocess_message.to_json
+    ).send_to_asynchronous_pipe
   end
 end

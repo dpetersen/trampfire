@@ -39,6 +39,10 @@ class InterprocessMessage
     end
   end
 
+  def send_to_asynchronous_pipe
+    NamedPipe.asynchronous_pipe.write(self.to_json)
+  end
+
   def response_pipe
     NamedPipe.for_reading(response_pipe_path) if response_pipe_path
   end
