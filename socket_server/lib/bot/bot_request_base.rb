@@ -8,8 +8,13 @@ class BotRequestBase
   attr_reader :parent_bot_class, :parent_bot
   attr_accessor :message_hash, :message
 
-  def self.handle_bot_event(event_name, &handler)
+  def self.handle_bot_event(event_name, handler_module = nil, &handler_block)
     @bot_event_handlers ||= {}
+
+    handler = if block_given? then handler_block
+              else handler_module
+              end
+
     @bot_event_handlers[event_name] = handler
   end
 

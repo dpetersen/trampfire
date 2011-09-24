@@ -5,36 +5,10 @@ require_relative '../../../lib/shared'
 require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 
 require_relative 'models/models'
-require_relative 'lib/github_api_helper'
-require_relative 'lib/pull_request_checker'
+require_relative 'lib/libs'
 
 class GithubBotRequest < BotRequestBase
-  handle_bot_event("post_commit") do
-    within_subprocess do
-      post_commit_object = JSON.parse(message)
-
-      repository_owner = post_commit_object["repository"]["owner"]["name"]
-      repository_name = post_commit_object["repository"]["name"]
-
-      if RepositoryWatch.where(owner_login: repository_owner, repository_name: repository_name).exists?
-        message_html = "<h4>Changes have been pushed to '#{repository_name}'</h4>"
-
-        post_commit_object["commits"].each do |commit_object|
-          sha = commit_object["id"]
-          api =  GithubApiHelper.new(config["username"], config["api_key"])
-          commit = api.commit(repository_owner, repository_name, sha)
-
-          view_hash = build_view_hash_for_commit(repository_owner, repository_name, sha)
-          message_html << render_view("commit", view_hash)
-        end
-
-        message_hash["data"] = message_html
-        interprocess_message = BotInitiatedInterprocessMessage.new("GitHubBot", "post_commit", message_hash: message_hash)
-        asynchronous_pipe.write interprocess_message.to_json
-      else raise "Got a post-commit hook from unknown repo: '#{repository_owner}/#{repository_name}'"
-      end
-    end
-  end
+  handle_bot_event("post_commit", PostCommitEventHandler)
 
   handle_bot_event("create_repository_watch") do
     repository_watch_attributes = JSON.parse(message_hash)

@@ -11,7 +11,13 @@ protected
     handler = bot_request_class.handler_for_event(event_name)
     raise "I have no handler for the event: '#{event_name}'" unless handler
 
-    handler_response = bot_request.instance_eval &handler
+    handler_response = \
+      if handler.is_a?(Module)
+        bot_request.singleton_class.send(:include, handler)
+        bot_request.handle
+      else
+        bot_request.instance_eval &handler
+      end
 
     if interprocess_message.response_pipe
       interprocess_message.response_pipe.write handler_response
