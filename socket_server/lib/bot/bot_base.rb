@@ -3,35 +3,19 @@ require 'json'
 
 require File.join(PATHS::SOCKET_SERVER::LIB, 'interprocess_message')
 
+require_relative 'config'
 require_relative 'pipe_connector'
 require_relative 'subprocessor'
 
 class BotBase
+  include Config
   include PipeConnector
-    include Subprocessor
-
-  def self.inherited(subclass)
-    bot_directory_name = subclass.name.underscore.gsub(/_bot/, '')
-    bot_config = File.join(PATHS::SOCKET_SERVER::BOTS, bot_directory_name, "config.yml")
-
-    if File.exists?(bot_config)
-      subclass.instance_variable_set(:"@config", YAML::load(File.open(bot_config)))
-    end
-  end
-
-  def self.config
-    @config
-  end
-
-  def config
-    self.class.config
-  end
+  include Subprocessor
 
   def self.periodically(seconds, &block)
     @periodic_tasks ||= []
     @periodic_tasks << [seconds, block]
   end
-
 
   def initialize
     connect_asyncronous_pipe
