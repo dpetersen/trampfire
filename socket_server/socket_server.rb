@@ -14,7 +14,8 @@ ActiveRecord::Base.establish_connection(
   host: DatabaseConfig.host,
   username: DatabaseConfig.username,
   password: DatabaseConfig.password,
-  database: DatabaseConfig.database
+  database: DatabaseConfig.database,
+  reconnect: true
 )
 
 AllClients = Clients.new

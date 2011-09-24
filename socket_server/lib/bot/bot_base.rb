@@ -34,7 +34,8 @@ protected
       username: "root",
       password: "",
       database: long_bot_name,
-      encoding: "utf8"
+      encoding: "utf8",
+      reconnect: true
     )
     ActiveRecord::Base.logger = Logger.new(STDOUT)
   end
