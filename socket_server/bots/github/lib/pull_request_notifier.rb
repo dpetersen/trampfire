@@ -53,11 +53,7 @@ protected
     @new_pull_requests.keys.each do |tag_name|
       html = ""
       @new_pull_requests[tag_name].each do |pull_request|
-        title = pull_request["title"]
-        pull_requestor = pull_request["user"]["name"]
-        project = "#{pull_request["base"]["user"]["name"]}/#{pull_request["base"]["repository"]["name"]}"
-
-        html = render_view("pull_request", title: title, pull_requestor: pull_requestor, project: project)
+        html = render_view("pull_request", pull_request_view_hash(pull_request))
       end
 
       send_new_pull_requests(tag_name, html)
@@ -72,5 +68,22 @@ protected
       "pull_requests",
       message_hash: message_object
     ).send_to_asynchronous_pipe
+  end
+
+  def pull_request_view_hash(pull_request)
+    repository_owner_name = pull_request["base"]["user"]["login"]
+    repository_name = pull_request["base"]["repository"]["name"]
+    pull_requestor = pull_request["user"]["login"]
+
+    {
+      title: pull_request["title"],
+      body: pull_request["body"],
+      url: pull_request["html_url"],
+      pull_requestor: pull_requestor,
+      pull_requestor_gravatar_url: "http://gravatar.com/avatar/#{pull_request["user"]["gravatar_id"]}",
+      pull_requestor_url: "http://github.com/#{pull_requestor}",
+      repository_display_name: "#{repository_owner_name}/#{repository_name}",
+      repository_url: pull_request["base"]["repository"]["url"],
+    }
   end
 end

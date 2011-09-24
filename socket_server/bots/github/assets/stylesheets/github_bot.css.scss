@@ -1,11 +1,12 @@
-.github-bot {
+// Commits
+.github-bot-commit {
   background: #E6F1F6;
   border: 1px solid #C5D5DD;
   border-radius: 4px;
   margin-bottom: 8px;
 }
 
-.github-bot .commit-meta {
+.github-bot-commit .commit-meta {
   display: block;
   background: white;
   border-top: 1px solid #D8E6EC;
@@ -13,7 +14,7 @@
   border-bottom-left-radius: 4px;
 }
 
-.github-bot .commit-message {
+.github-bot-commit .commit-message {
   margin-top: 8px;
   margin-left: 8px;
   font-size: 18px;
@@ -22,7 +23,7 @@
   text-shadow: 0 1px rgba(255, 255, 255, 0.5)
 }
 
-.github-bot .authorship {
+.github-bot-commit .authorship {
   margin-top: 8px;
   margin-left: 8px;
   padding-bottom: 8px;
@@ -30,13 +31,13 @@
   color: #999;
 }
 
-.github-bot .authorship a {
+.github-bot-commit .authorship a {
   color: #444;
   text-decoration: none;
   font-weight: bold;
 }
 
-.github-bot .sha-block {
+.github-bot-commit .sha-block {
   margin-top: 18px;
   margin-right: 8px;
   float: right;
@@ -44,8 +45,57 @@
   font-size: 12px;
 }
 
-.github-bot .sha {
+.github-bot-commit .sha {
   font-size: 11px;
   font-family: Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
   color: #444;
+}
+
+
+// Pull Requests
+
+.github-bot-pull-request {
+  margin-top: 6px;
+  padding: 0px 10px 18px 10px;
+  color: #888;
+  background: white;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.github-bot-pull-request a,
+.github-bot-pull-request a:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.github-bot-pull-request h3 {
+  margin: -2px 0 0 0;
+  font-size: 14px;
+  color: black;
+}
+
+.github-bot-pull-request p {
+  margin: -5px 0px 0px 0px;
+}
+
+.github-bot-pull-request p a {
+  color: #555;
+}
+
+.github-bot-pull-request .meta a {
+  color: #4183C4
+}
+
+.github-bot-pull-request .meta {
+  float: left;
+  margin-top: 4px;
+  margin-bottom: -2px;
+  height: 16px;
+  padding: 4px 6px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.55);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  background: #eee;
+  border-radius: 3px;
+  clear: right;
 }
