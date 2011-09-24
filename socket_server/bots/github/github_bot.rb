@@ -1,6 +1,3 @@
-require 'active_record'
-require 'logger'
-
 require_relative '../../../lib/shared'
 require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 
@@ -41,16 +38,7 @@ end
 
 class GithubBot < BotBase
   def initialize
-    ActiveRecord::Base.establish_connection(
-      :adapter  => "mysql2",
-      :host     => "localhost",
-      :username => "root",
-      :password => "",
-      :database => "github_bot_development",
-      :encoding => 'utf8'
-    )
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
-
+    autoconnect_database
     super
   end
 

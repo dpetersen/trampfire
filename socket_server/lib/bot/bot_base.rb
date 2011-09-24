@@ -24,6 +24,21 @@ class BotBase
 
 protected
 
+  def autoconnect_database
+    require 'logger'
+    require 'active_record'
+
+    ActiveRecord::Base.establish_connection(
+      adapter: "mysql2",
+      host: "localhost",
+      username: "root",
+      password: "",
+      database: long_bot_name,
+      encoding: "utf8"
+    )
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+  end
+
   def outgoing_pipe
     return @outgoing_pipe if @outgoing_pipe
 
@@ -34,7 +49,7 @@ protected
   def incoming_pipe
     return @incoming_pipe if @incoming_pipe
 
-    path = File.join(PATHS::SOCKET_SERVER::ACTIVATED_BOTS, self.class.name.underscore.gsub(/_bot/, ""), "incoming")
+    path = File.join(PATHS::SOCKET_SERVER::ACTIVATED_BOTS, short_bot_name, "incoming")
     @incoming_pipe = NamedPipe.for_reading(path)
   end
 
@@ -54,6 +69,14 @@ protected
     end
 
     wait_for_incoming
+  end
+
+  def long_bot_name
+    self.class.name.underscore
+  end
+
+  def short_bot_name
+    long_bot_name.gsub(/_bot/, "")
   end
 
   def bot_request_class
