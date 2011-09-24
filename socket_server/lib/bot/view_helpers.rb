@@ -9,7 +9,7 @@ protected
 
   def find_template(view_name)
     base = "views/#{view_name}.html"
-    ["erb", "haml"].each do |extension|
+    [ "haml", "erb" ].each do |extension|
       path = "#{base}.#{extension}"
       return path if File.exist?(path)
     end

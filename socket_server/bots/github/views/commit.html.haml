@@ -1,0 +1,21 @@
+.github-bot
+  %p.commit-message
+    %a{ href: repository.owner_path }= repository.owner_login
+    \/
+    %a{ href: repository.url }= repository.name
+    %br/
+    = commit.message
+
+  .commit-meta
+    %span.sha-block
+      commit
+      %span.sha
+        %a{ href: commit.url }= commit.sha
+    .authorship
+      %img{ src: commit.author_gravatar_url, width: 24, height: 24}/
+      %span.author-name
+        - if commit.authored_by_github_user?
+          %a{ href: commit.author_profile_path }= commit.author_name
+        - else
+          = commit.author_name
+      authored
