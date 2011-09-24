@@ -51,6 +51,14 @@ class InterprocessMessage
     NamedPipe.for_reading(response_pipe_path) if response_pipe_path
   end
 
+  def respond_with(s)
+    self.response_pipe.write(s)
+  end
+
+  def response_requested?
+    self.response_pipe.present?
+  end
+
   def to_hash
     base_hash = { type: type }
     base_hash.merge!(message: message) if message

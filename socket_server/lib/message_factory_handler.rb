@@ -5,7 +5,7 @@ module MessageFactoryHandler
       interprocess_message = InterprocessMessage.from_json(interprocess_message_string)
 
       message = Message.create!(interprocess_message.message)
-      interprocess_message.response_pipe.write(message.as_json.to_json)
+      interprocess_message.respond_with(message.as_json.to_json)
     rescue EOFError
     end
   end

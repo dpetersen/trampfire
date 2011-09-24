@@ -19,8 +19,8 @@ protected
         bot_request.instance_eval &handler
       end
 
-    if interprocess_message.response_pipe
-      interprocess_message.response_pipe.write handler_response
+    if interprocess_message.response_requested?
+      interprocess_message.respond_with(handler_response)
     end
   end
 end
