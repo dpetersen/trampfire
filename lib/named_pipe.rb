@@ -13,12 +13,11 @@ class NamedPipe
     self.for_writing(path_to_bot_pipe(bot_name))
   end
 
-  def self.anonymous_for_writing
-    self.for_writing(new_anonymous_pipe_path)
-  end
-
-  def self.anonymous_for_reading
-    self.for_reading(new_anonymous_pipe_path)
+  def self.with_anonymous_pipe_for_reading(&block)
+    anonymous_pipe = self.for_reading(new_anonymous_pipe_path)
+    return_value = yield anonymous_pipe
+    anonymous_pipe.destroy
+    return_value
   end
 
   def self.message_factory_pipe
@@ -55,10 +54,15 @@ class NamedPipe
     JSON.parse(read)
   end
 
+  def destroy
+    @pipe.close
+    `rm #{@path}`
+  end
+
 protected
 
   def self.new_anonymous_pipe_path
-    "/tmp/#{Time.now.to_i}"
+    "/tmp/#{Time.now.to_i}.#{$$}"
   end
 
   def self.path_to_bot_pipe(bot_name)
