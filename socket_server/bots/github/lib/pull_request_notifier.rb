@@ -69,7 +69,7 @@ protected
     message_object = MessageFromFactory.new(tag_name, "GithubBot", html).message
 
     interprocess_message = BotInitiatedInterprocessMessage.new(
-      "GitHubBot",
+      "github",
       "pull_requests",
       message_hash: message_object
     )

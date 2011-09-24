@@ -10,13 +10,11 @@ module GithubBot
       get "/" do
         response_pipe = NamedPipe.anonymous_for_reading
 
-        interprocess_message = BotInitiatedInterprocessMessage.new(
-          "GithubBot",
+        BotInitiatedInterprocessMessage.new(
+          "github",
           "fetch_repository_watches",
           response_pipe: response_pipe
-        )
-
-        NamedPipe.for_writing_for_bot("github").write(interprocess_message.to_json)
+        ).send_to_bot
 
         @repository_watches = response_pipe.read_json
 
@@ -26,14 +24,12 @@ module GithubBot
       post "/watch" do
         response_pipe = NamedPipe.anonymous_for_reading
 
-        interprocess_message = BotInitiatedInterprocessMessage.new(
-          "GithubBot",
+        BotInitiatedInterprocessMessage.new(
+          "github",
           "create_repository_watch",
           message_hash: params[:repository_watch].to_json,
           response_pipe: response_pipe
-        )
-
-        NamedPipe.for_writing_for_bot("github").write(interprocess_message.to_json)
+        ).send_to_bot
 
         repository_watch = response_pipe.read_json
         if repository_watch["id"].nil?

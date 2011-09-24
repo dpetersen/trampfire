@@ -80,6 +80,8 @@ class BotInitiatedInterprocessMessage < InterprocessMessage
   # options - A hash of arguments.  Pass message OR message_hash:
   #           :message - A Message model instance.
   #           :message_hash - A hash representation of a Message.
+  #           :response_pipe - A path to a named pipe where the sender
+  #             will be awaiting a response.
   #           :response_pipe - A NamedPipe instance where the sender
   #             will be awaiting a response.
   #
@@ -88,8 +90,13 @@ class BotInitiatedInterprocessMessage < InterprocessMessage
     self.type = InterprocessMessage::TYPES[:bot_initiated]
     self.bot_name = bot_name
     self.event_name = event_name
+    self.response_pipe_path = options[:response_pipe_path] if options[:response_pipe_path]
     self.response_pipe_path = options[:response_pipe].path if options[:response_pipe]
     super(options)
+  end
+
+  def send_to_bot
+    NamedPipe.for_writing_for_bot(bot_name).write(self.to_json)
   end
 
   def to_json
