@@ -6,6 +6,7 @@ require File.join(PATHS::SOCKET_SERVER::LIB, 'interprocess_message')
 require_relative 'config'
 require_relative 'periodic_execution'
 require_relative 'subprocessor'
+require_relative 'view_helpers'
 require_relative 'handlers/user_initiated_message'
 require_relative 'handlers/bot_initiated_message'
 
@@ -13,6 +14,7 @@ class BotBase
   include Config
   include PeriodicExecution
   include Subprocessor
+  include ViewHelpers
 
   include UserInitiatedMessageHandler
   include BotInitiatedMessageHandler

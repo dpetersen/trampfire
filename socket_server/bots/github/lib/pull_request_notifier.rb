@@ -1,4 +1,6 @@
 class PullRequestNotifier
+  include ViewHelpers
+
   attr_reader :new_pull_requests
 
   def initialize(api)
@@ -55,10 +57,7 @@ protected
         pull_requestor = pull_request["user"]["name"]
         project = "#{pull_request["base"]["user"]["name"]}/#{pull_request["base"]["repository"]["name"]}"
 
-        html << "<strong>#{title}</strong>"
-        html << " from #{pull_requestor}"
-        html << " in project #{project}"
-        html << "<br />"
+        html = render_view("pull_request", title: title, pull_requestor: pull_requestor, project: project)
       end
 
       send_new_pull_requests(tag_name, html)

@@ -3,6 +3,7 @@ require 'erubis'
 require_relative 'subprocessor'
 
 class BotRequestBase
+  include ViewHelpers
   include Subprocessor
 
   attr_reader :parent_bot_class, :parent_bot
@@ -33,16 +34,7 @@ class BotRequestBase
     self.parent_bot_class.config
   end
 
-  def render_view(view, variables = {})
-    template = File.open("views/#{view}.html.erb", variables).read
-    Erubis::Eruby.new(template).result(variables)
-  end
-
   protected
-
-  def public_asset_path(path)
-    "/bots/#{bot_lowercase_name}/public#{path}"
-  end
 
   def bot_lowercase_name
     self.class.name.underscore.gsub(/_bot_request/, '')
