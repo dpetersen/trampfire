@@ -60,30 +60,7 @@ class GithubBot < BotBase
     PullRequest.destroy_all
 
     api = GithubApiHelper.new(config["username"], config["api_key"])
-    pull_requests = PullRequestChecker.new(api).new_pull_requests
-
-    pull_requests.keys.each do |tag_name|
-      html = ""
-      pull_requests[tag_name].each do |pull_request|
-        title = pull_request["title"]
-        pull_requestor = pull_request["user"]["name"]
-        project = "#{pull_request["base"]["user"]["name"]}/#{pull_request["base"]["repository"]["name"]}"
-
-        html << "<strong>#{title}</strong>"
-        html << " from #{pull_requestor}"
-        html << " in project #{project}"
-        html << "<br />"
-      end
-
-      message_object = MessageFromFactory.new(tag_name, "GithubBot", html).message
-
-      interprocess_message = BotInitiatedInterprocessMessage.new(
-        "GitHubBot",
-        "pull_requests",
-        message_hash: message_object
-      )
-      asynchronous_pipe.write interprocess_message.to_json
-    end
+    PullRequestNotifier.new(api, asynchronous_pipe)
   end
 end
 
