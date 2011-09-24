@@ -10,7 +10,7 @@ class Trampfire.TrampfireView extends Backbone.View
 
     # We're big on security around here.  Wait a minute...
     email = $("body").data("email")
-    @socketConnection = new Trampfire.SocketConnection("ws://localhost:8080?email=#{ email }")
+    @socketConnection = new Trampfire.SocketConnection("ws://localhost:31981?email=#{ email }")
 
     @bindNetworkEvents()
     @bindUIEvents()

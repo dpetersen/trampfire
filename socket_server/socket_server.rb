@@ -30,7 +30,7 @@ EventMachine.kqueue = true if EventMachine.kqueue?
 
 EventMachine.run do
 
-  EventMachine::WebSocket.start(host: "0.0.0.0", port: 8080) do |ws|
+  EventMachine::WebSocket.start(host: "0.0.0.0", port: 31981) do |ws|
     ws.onopen do
       client = Client.new(ws)
       AllClients.add(client)
