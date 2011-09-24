@@ -1,13 +1,11 @@
 require 'json'
 require 'sinatra'
 
-require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'pipe_connector')
 require File.join(PATHS::SOCKET_SERVER::LIB, 'interprocess_message')
 
 module GithubBot
   module Rack
     class PostCommitTarget < Sinatra::Base
-      include PipeConnector
 
       post '/' do
         begin
@@ -19,9 +17,7 @@ module GithubBot
             message: message
           )
 
-          github_bot_pipe = incoming_pipe_for_bot("github")
-          github_bot_pipe.puts interprocess_message.to_json
-          github_bot_pipe.flush
+          NamedPipe.for_writing_for_bot("github").write(interprocess_message.to_json)
 
           interprocess_message.inspect
         rescue Exception => e

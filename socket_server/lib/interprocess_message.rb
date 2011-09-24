@@ -39,6 +39,10 @@ class InterprocessMessage
     end
   end
 
+  def response_pipe
+    NamedPipe.for_reading(response_pipe_path) if response_pipe_path
+  end
+
   def to_hash
     base_hash = { type: type }
     base_hash.merge!(message: message) if message

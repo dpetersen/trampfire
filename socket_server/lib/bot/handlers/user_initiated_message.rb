@@ -6,9 +6,7 @@ protected
     message_hash = process_in_request_class(interprocess_message.message)
     interprocess_message = UserInitiatedInterprocessMessage.new(message_hash: message_hash)
 
-    connect_outgoing_pipe
-    @outgoing_pipe.puts interprocess_message.to_json
-    @outgoing_pipe.flush
+    outgoing_pipe.write interprocess_message.to_json
   end
 
   def process_in_request_class(message_hash)

@@ -31,14 +31,13 @@ protected
 
   def discover_active_bots
     @bots = Pathname.
-      glob("#{ActivatedBotsPath}/*/").
+      glob("#{PATHS::SOCKET_SERVER::ACTIVATED_BOTS}/*/").
       map { |i| i.basename.to_s }
   end
 
   def connect_incoming_named_pipe
     path = "#{BotsPath}/bot_manager_incoming"
-    `mkfifo #{path}` unless File.exist?(path)
-    @incoming_pipe = open(path, "r+")
+    @incoming_pipe = NamedPipe.for_reading(path)
   end
 
   # Pass InterprocessMessage JSON through each activated bot.
@@ -49,11 +48,10 @@ protected
   # InterprocessMessage.
   def pass_interprocess_message_through_bot_bus(interprocess_message)
     @bots.inject(interprocess_message.to_json) do |passed_interprocess_message_string, bot_directory|
-      bot_pipe = open("#{ActivatedBotsPath}/#{bot_directory}/incoming", "w+")
-      bot_pipe.puts passed_interprocess_message_string
-      bot_pipe.flush
+      bot_pipe = NamedPipe.for_writing_for_bot(bot_directory)
+      bot_pipe.write passed_interprocess_message_string
 
-      @incoming_pipe.gets
+      @incoming_pipe.read
     end
   end
 end

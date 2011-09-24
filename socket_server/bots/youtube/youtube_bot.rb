@@ -1,4 +1,4 @@
-require_relative '../../../paths'
+require_relative '../../../lib/shared'
 
 require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 

@@ -13,10 +13,8 @@ protected
 
     handler_response = bot_request.instance_eval &handler
 
-    if interprocess_message.response_pipe_path
-      response_pipe = connect_named_pipe(interprocess_message.response_pipe_path)
-      response_pipe.puts handler_response
-      response_pipe.flush
+    if interprocess_message.response_pipe
+      interprocess_message.response_pipe.write handler_response
     end
   end
 end

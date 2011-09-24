@@ -1,6 +1,6 @@
 module PATHS
   module SHARED
-    BASE = File.join(File.dirname(__FILE__))
+    BASE = File.join(File.dirname(__FILE__), "..")
     MODELS = File.join(BASE, 'models')
   end
 

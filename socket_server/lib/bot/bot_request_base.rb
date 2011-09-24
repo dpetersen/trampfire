@@ -1,13 +1,11 @@
 require 'erubis'
 
 require_relative 'subprocessor'
-require_relative 'pipe_connector'
 
 class BotRequestBase
-  include PipeConnector
   include Subprocessor
 
-  attr_reader :parent_bot_class
+  attr_reader :parent_bot_class, :parent_bot
   attr_accessor :message_hash, :message
 
   def self.handle_bot_event(event_name, &handler)
@@ -19,7 +17,8 @@ class BotRequestBase
     @bot_event_handlers[event_name]
   end
 
-  def initialize(parent_bot_class, message_hash)
+  def initialize(parent_bot, parent_bot_class, message_hash)
+    @parent_bot = parent_bot
     @parent_bot_class = parent_bot_class
     self.message_hash = message_hash
     self.message = message_hash["data"] if message_hash
@@ -27,6 +26,10 @@ class BotRequestBase
 
   def config
     self.parent_bot_class.config
+  end
+
+  def asynchronous_pipe
+    self.parent_bot.asynchronous_pipe
   end
 
   def render_view(view, variables = {})

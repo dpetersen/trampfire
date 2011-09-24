@@ -1,8 +1,4 @@
 module AsynchronousMessageHandler
-  def self.create_incoming_pipe(path)
-    `mkfifo #{path}` unless File.exists?(path)
-  end
-
   def notify_readable
     begin
       interprocess_message_string = @io.readline

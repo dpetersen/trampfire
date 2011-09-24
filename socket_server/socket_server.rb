@@ -3,7 +3,7 @@ require 'eventmachine'
 require 'em-websocket'
 require 'active_record'
 
-require_relative '../paths'
+require_relative '../lib/shared'
 
 require_relative 'lib/libs'
 require File.join(PATHS::SHARED::BASE, 'database_config')
@@ -19,11 +19,8 @@ ActiveRecord::Base.establish_connection(
 
 AllClients = Clients.new
 
-asynchronous_incoming_pipe_path = 'bots/asynchronous_incoming_pipe_path'
-AsynchronousMessageHandler.create_incoming_pipe(asynchronous_incoming_pipe_path)
-
-message_factory_incoming_pipe_path = 'message_factory_incoming_pipe'
-MessageFactoryHandler.create_incoming_pipe(message_factory_incoming_pipe_path)
+asynchronous_incoming_pipe_path = File.join(PATHS::SOCKET_SERVER::BOTS, 'asynchronous_incoming_pipe_path')
+message_factory_incoming_pipe_path = File.join(PATHS::SOCKET_SERVER::BASE, 'message_factory_incoming_pipe')
 
 # For OSX support, apparently
 EventMachine.kqueue = true if EventMachine.kqueue?

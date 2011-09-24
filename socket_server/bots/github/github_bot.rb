@@ -1,7 +1,7 @@
 require 'active_record'
 require 'logger'
 
-require_relative '../../../paths'
+require_relative '../../../lib/shared'
 require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 
 require_relative 'models/models'
@@ -30,8 +30,7 @@ class GithubBotRequest < BotRequestBase
 
         message_hash["data"] = message_html
         interprocess_message = BotInitiatedInterprocessMessage.new("GitHubBot", "post_commit", message_hash: message_hash)
-        @asynchronous_pipe.puts interprocess_message.to_json
-        @asynchronous_pipe.flush
+        asynchronous_pipe.write interprocess_message.to_json
       else raise "Got a post-commit hook from unknown repo: '#{repository_owner}/#{repository_name}'"
       end
     end
@@ -60,8 +59,7 @@ class GithubBotRequest < BotRequestBase
 
         message_hash["data"] = html
         interprocess_message = UserInitiatedInterprocessMessage.new(message_hash: message_hash)
-        @asynchronous_pipe.puts interprocess_message.to_json
-        @asynchronous_pipe.flush
+        asynchronous_pipe.write interprocess_message.to_json
       end
 
       octocatize_message(message)
@@ -109,7 +107,7 @@ class GithubBot < BotBase
     pull_requests = PullRequestChecker.new(api).new_pull_requests
     puts pull_requests.inspect
 
-    response_pipe_path = create_anonymous_pipe
+    response_pipe = NamedPipe.anonymous_for_writing
 
     pull_requests.keys.each do |tag_name|
       html = ""
@@ -125,7 +123,7 @@ class GithubBot < BotBase
       end
 
       message_creation_interprocess_message = MessageFactoryInterprocessMessage.new(
-        response_pipe_path,
+        response_pipe.path,
         message_hash: {
           tag_name: tag_name,
           original_message: html,
@@ -133,11 +131,9 @@ class GithubBot < BotBase
         }
       )
 
-      message_factory_pipe.puts message_creation_interprocess_message.to_json
-      message_factory_pipe.flush
+      message_factory_pipe.write message_creation_interprocess_message.to_json
 
-      response_pipe = connect_named_pipe(response_pipe_path)
-      message_string = response_pipe.gets
+      message_string = response_pipe.read
 
       message_object = JSON.parse(message_string)
       interprocess_message = BotInitiatedInterprocessMessage.new(
@@ -145,8 +141,7 @@ class GithubBot < BotBase
         "pull_requests",
         message_hash: message_object
       )
-      @asynchronous_pipe.puts interprocess_message.to_json
-      @asynchronous_pipe.flush
+      asynchronous_pipe.write interprocess_message.to_json
     end
   end
 end
