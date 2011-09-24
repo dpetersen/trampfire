@@ -6,9 +6,8 @@ require 'active_record'
 require_relative '../paths'
 
 require_relative 'lib/libs'
-require_relative '../models/models'
-require_relative '../database_config'
-
+require File.join(PATHS::SHARED::BASE, 'database_config')
+require File.join(PATHS::SHARED::MODELS, 'models')
 
 ActiveRecord::Base.establish_connection(
   adapter: DatabaseConfig.adapter,
@@ -30,7 +29,6 @@ MessageFactoryHandler.create_incoming_pipe(message_factory_incoming_pipe_path)
 EventMachine.kqueue = true if EventMachine.kqueue?
 
 EventMachine.run do
-
   EventMachine::WebSocket.start(host: "0.0.0.0", port: 31981) do |ws|
     ws.onopen do
       client = Client.new(ws)
@@ -59,13 +57,6 @@ EventMachine.run do
     end
   end
 
-  file_descriptor = IO.sysopen(asynchronous_incoming_pipe_path, Fcntl::O_RDONLY|Fcntl::O_NONBLOCK)
-  io_stream = IO.new(file_descriptor, Fcntl::O_RDONLY|Fcntl::O_NONBLOCK)
-  pipe_watcher = EventMachine.watch(io_stream, AsynchronousMessageHandler)
-  pipe_watcher.notify_readable = true
-
-  file_descriptor = IO.sysopen(message_factory_incoming_pipe_path, Fcntl::O_RDONLY|Fcntl::O_NONBLOCK)
-  io_stream = IO.new(file_descriptor, Fcntl::O_RDONLY|Fcntl::O_NONBLOCK)
-  pipe_watcher = EventMachine.watch(io_stream, MessageFactoryHandler)
-  pipe_watcher.notify_readable = true
+  NamedPipeWatcher.watch_at(asynchronous_incoming_pipe_path, AsynchronousMessageHandler)
+  NamedPipeWatcher.watch_at(message_factory_incoming_pipe_path, MessageFactoryHandler)
 end
