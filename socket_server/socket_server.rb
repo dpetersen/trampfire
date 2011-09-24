@@ -1,13 +1,14 @@
-require 'pry'
-
 require 'fcntl'
 require 'eventmachine'
 require 'em-websocket'
-require './lib/libs'
-
 require 'active_record'
-require '../models/models'
-require '../database_config'
+
+require_relative '../paths'
+
+require_relative 'lib/libs'
+require_relative '../models/models'
+require_relative '../database_config'
+
 
 ActiveRecord::Base.establish_connection(
   adapter: DatabaseConfig.adapter,

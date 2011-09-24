@@ -1,18 +1,18 @@
-require File.join(File.dirname(__FILE__), 'pipe_connector')
-require File.join(File.dirname(__FILE__), 'subprocessor')
-require File.join(File.dirname(__FILE__), '../lib/interprocess_message')
 require 'active_support/core_ext'
 require 'json'
+
+require File.join(PATHS::SOCKET_SERVER::LIB, 'interprocess_message')
+
+require_relative 'pipe_connector'
+require_relative 'subprocessor'
 
 class BotBase
   include PipeConnector
     include Subprocessor
 
-  BotsRoot = File.dirname(__FILE__)
-
   def self.inherited(subclass)
     bot_directory_name = subclass.name.underscore.gsub(/_bot/, '')
-    bot_config = File.join(BotsRoot, bot_directory_name, "config.yml")
+    bot_config = File.join(PATHS::SOCKET_SERVER::BOTS, bot_directory_name, "config.yml")
 
     if File.exists?(bot_config)
       subclass.instance_variable_set(:"@config", YAML::load(File.open(bot_config)))

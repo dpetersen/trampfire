@@ -1,6 +1,7 @@
-require File.join(File.dirname(__FILE__), 'subprocessor')
-require File.join(File.dirname(__FILE__), 'pipe_connector')
 require 'erubis'
+
+require_relative 'subprocessor'
+require_relative 'pipe_connector'
 
 class BotRequestBase
   include PipeConnector

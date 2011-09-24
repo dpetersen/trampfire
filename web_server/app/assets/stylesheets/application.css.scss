@@ -1,7 +1,7 @@
-// I'd love to get more programmatic about this, but that doesn't
-// seem possible at the moment.
-// This won't follow symlinks, either, so it will require CSS for
-// inactive bots.
+// This won't follow symlinks, so it gets the stylesheets for inactive bots, too.
+// You can evaluate ERB later, but only calling require_asset directly. No require_tree.
+// If you give it one of the PATH constants, it says require_tree must be relative.
+// Meh.  I tried.
 //= require_tree ../../../../socket_server/bots
 //
 //= require vendor/load_orderer

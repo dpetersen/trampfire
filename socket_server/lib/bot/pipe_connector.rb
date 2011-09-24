@@ -2,7 +2,7 @@ module PipeConnector
   def connect_asyncronous_pipe
     return if @asynchronous_pipe
 
-    path = File.join(File.dirname(__FILE__), 'asynchronous_incoming_pipe_path')
+    path = File.join(PATHS::SOCKET_SERVER::BOTS, 'asynchronous_incoming_pipe_path')
     @asynchronous_pipe = connect_named_pipe(
       path,
       "Can't connect to asynchronous named pipe!"
@@ -12,7 +12,7 @@ module PipeConnector
   def connect_message_factory_pipe
     return if @message_factory_pipe
 
-    path = File.join(File.dirname(__FILE__), '../message_factory_incoming_pipe')
+    path = File.join(PATHS::SOCKET_SERVER::BASE, 'message_factory_incoming_pipe')
     @message_factory_pipe = connect_named_pipe(
       path,
       "Can't connect to message factory named pipe at '#{path}'!"
@@ -27,7 +27,7 @@ module PipeConnector
   end
 
   def incoming_pipe_for_bot(bot_name)
-    path = File.join(File.dirname(__FILE__), "activated/#{bot_name}/incoming")
+    path = File.join(PATHS::SOCKET_SERVER::ACTIVATED_BOTS, "#{bot_name}/incoming")
     connect_named_pipe(
       path,
       "Can't connect to named pipe for bot '#{bot_name}'!"

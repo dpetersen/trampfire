@@ -1,5 +1,6 @@
-require '../bot_base'
-require '../bot_request_base'
+require_relative '../../../paths'
+
+require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 
 class YoutubeBotRequest < BotRequestBase
   def process

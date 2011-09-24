@@ -1,7 +1,8 @@
-require File.join(File.dirname(__FILE__), '../../../pipe_connector')
 require 'json'
 require 'haml'
 require 'sinatra'
+
+require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'pipe_connector')
 
 module GithubBot
   module Rack

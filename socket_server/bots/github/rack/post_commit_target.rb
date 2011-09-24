@@ -1,7 +1,8 @@
-require File.join(File.dirname(__FILE__), '../../../pipe_connector')
-require File.join(File.dirname(__FILE__), '../../../../lib/interprocess_message')
 require 'json'
 require 'sinatra'
+
+require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'pipe_connector')
+require File.join(PATHS::SOCKET_SERVER::LIB, 'interprocess_message')
 
 module GithubBot
   module Rack

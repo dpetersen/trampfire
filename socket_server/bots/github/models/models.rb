@@ -1,6 +1,6 @@
 ActiveRecord::Base.include_root_in_json = false
 
-require File.join(File.dirname(__FILE__), 'commit')
-require File.join(File.dirname(__FILE__), 'repository')
-require File.join(File.dirname(__FILE__), 'repository_watch')
-require File.join(File.dirname(__FILE__), 'pull_request')
+require_relative 'commit'
+require_relative 'repository'
+require_relative 'repository_watch'
+require_relative 'pull_request'

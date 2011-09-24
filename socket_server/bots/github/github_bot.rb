@@ -1,12 +1,12 @@
 require 'active_record'
 require 'logger'
-require './models/models'
-require '../bot_base'
-require '../bot_request_base'
-require './lib/github_api_helper'
-require './lib/pull_request_checker'
 
-require 'pry'
+require_relative '../../../paths'
+require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
+
+require_relative 'models/models'
+require_relative 'lib/github_api_helper'
+require_relative 'lib/pull_request_checker'
 
 class GithubBotRequest < BotRequestBase
   handle_bot_event("post_commit") do

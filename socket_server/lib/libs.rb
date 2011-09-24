@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), 'client')
-require File.join(File.dirname(__FILE__), 'clients')
-require File.join(File.dirname(__FILE__), 'bot_manager')
-require File.join(File.dirname(__FILE__), 'asynchronous_message_handler')
-require File.join(File.dirname(__FILE__), 'message_factory_handler')
-require File.join(File.dirname(__FILE__), 'interprocess_message')
+require_relative 'client'
+require_relative 'clients'
+require_relative 'bot_manager'
+require_relative 'asynchronous_message_handler'
+require_relative 'message_factory_handler'
+require_relative 'interprocess_message'

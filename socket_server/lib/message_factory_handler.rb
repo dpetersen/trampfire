@@ -1,4 +1,4 @@
-require './bots/pipe_connector'
+require_relative 'bot/pipe_connector'
 
 module MessageFactoryHandler
   include PipeConnector
