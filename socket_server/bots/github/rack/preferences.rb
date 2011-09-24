@@ -13,7 +13,7 @@ module GithubBot
         interprocess_message = BotInitiatedInterprocessMessage.new(
           "GithubBot",
           "fetch_repository_watches",
-          response_pipe_path: response_pipe.path
+          response_pipe: response_pipe
         )
 
         NamedPipe.for_writing_for_bot("github").write(interprocess_message.to_json)
@@ -30,7 +30,7 @@ module GithubBot
           "GithubBot",
           "create_repository_watch",
           message_hash: params[:repository_watch].to_json,
-          response_pipe_path: response_pipe.path
+          response_pipe: response_pipe
         )
 
         NamedPipe.for_writing_for_bot("github").write(interprocess_message.to_json)

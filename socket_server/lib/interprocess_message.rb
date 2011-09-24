@@ -32,7 +32,7 @@ class InterprocessMessage
       )
     when TYPES[:message_factory]
       MessageFactoryInterprocessMessage.new(
-        object["response_pipe_path"],
+        NamedPipe.for_writing(object["response_pipe_path"]),
         message_hash: object["message"]
       )
     else raise "I can't reconstitute the InterprocessMessage #{json}"
@@ -80,15 +80,15 @@ class BotInitiatedInterprocessMessage < InterprocessMessage
   # options - A hash of arguments.  Pass message OR message_hash:
   #           :message - A Message model instance.
   #           :message_hash - A hash representation of a Message.
-  #           :response_pipe_path - A path to a named pipe where
-  #             the sender will be awaiting a response.
+  #           :response_pipe - A NamedPipe instance where the sender
+  #             will be awaiting a response.
   #
   # Returns the new BotInitiatedInterprocessMessage
   def initialize(bot_name, event_name, options)
     self.type = InterprocessMessage::TYPES[:bot_initiated]
     self.bot_name = bot_name
     self.event_name = event_name
-    self.response_pipe_path = options[:response_pipe_path] if options[:response_pipe_path]
+    self.response_pipe_path = options[:response_pipe].path if options[:response_pipe]
     super(options)
   end
 
@@ -102,13 +102,13 @@ class MessageFactoryInterprocessMessage < InterprocessMessage
 
   # Public: Create a new BotInitiatedInterprocessMessage.
   #
-  # response_pipe_path: A path to a named pipe where the requestor
+  # response_pipe: A NamedPipe instance where the requestor
   #   will be awaiting the created Message JSON.
   #
   # Returns the new MessageFactoryInterprocessMessage
-  def initialize(response_pipe_path, options)
+  def initialize(response_pipe, options)
     self.type = InterprocessMessage::TYPES[:message_factory]
-    self.response_pipe_path = response_pipe_path
+    self.response_pipe_path = response_pipe.path
     super(options)
   end
 

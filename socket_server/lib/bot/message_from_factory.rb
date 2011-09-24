@@ -17,7 +17,7 @@ class MessageFromFactory
   def build_interprocess_message(tag_name, bot_name, original_message)
     @interprocess_message = \
       MessageFactoryInterprocessMessage.new(
-        @response_pipe.path,
+        @response_pipe,
         message_hash: {
           tag_name: tag_name,
           original_message: original_message,
