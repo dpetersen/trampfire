@@ -60,7 +60,7 @@ class GithubBot < BotBase
     PullRequest.destroy_all
 
     api = GithubApiHelper.new(config["username"], config["api_key"])
-    PullRequestNotifier.new(api, asynchronous_pipe)
+    PullRequestNotifier.new(api)
   end
 end
 

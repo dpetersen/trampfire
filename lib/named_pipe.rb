@@ -26,6 +26,11 @@ class NamedPipe
     NamedPipe.for_writing(path)
   end
 
+  def self.asynchronous_pipe
+    path = File.join(PATHS::SOCKET_SERVER::BOTS, 'asynchronous_incoming_pipe_path')
+    NamedPipe.for_writing(path)
+  end
+
   attr_reader :path
 
   def initialize(path, permissions)

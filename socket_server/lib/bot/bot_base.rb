@@ -22,13 +22,6 @@ class BotBase
     wait_for_incoming
   end
 
-  def asynchronous_pipe
-    return @asynchronous_pipe if @asynchronous_pipe
-
-    path = File.join(PATHS::SOCKET_SERVER::BOTS, 'asynchronous_incoming_pipe_path')
-    @asynchronous_pipe = NamedPipe.for_writing(path)
-  end
-
 protected
 
   def outgoing_pipe

@@ -33,10 +33,6 @@ class BotRequestBase
     self.parent_bot_class.config
   end
 
-  def asynchronous_pipe
-    self.parent_bot.asynchronous_pipe
-  end
-
   def render_view(view, variables = {})
     template = File.open("views/#{view}.html.erb", variables).read
     Erubis::Eruby.new(template).result(variables)

@@ -1,9 +1,8 @@
 class PullRequestNotifier
-  attr_reader :new_pull_requests, :asynchronous_pipe
+  attr_reader :new_pull_requests
 
-  def initialize(api, asynchronous_pipe)
+  def initialize(api)
     @api = api
-    @asynchronous_pipe = asynchronous_pipe
 
     fetch_pull_requests_for_watched_repositories
     process_new_pull_requests
@@ -74,6 +73,6 @@ protected
       "pull_requests",
       message_hash: message_object
     )
-    asynchronous_pipe.write interprocess_message.to_json
+    NamedPipe.asynchronous_pipe.write interprocess_message.to_json
   end
 end
