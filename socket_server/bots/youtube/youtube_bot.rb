@@ -3,7 +3,7 @@ require_relative '../../../lib/shared'
 require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 
 class YoutubeBotRequest < BotRequestBase
-  def process
+  def process_user_initiated_message
     if message =~ /^http:\/\/www\.youtube\.com\/watch\?v\=(.*)$/
       embed_html($1)
     end

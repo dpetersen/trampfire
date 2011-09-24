@@ -3,7 +3,7 @@ require_relative '../../../lib/shared'
 require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 
 class ImageBotRequest < BotRequestBase
-  def process
+  def process_user_initiated_message
     if message =~ /^http(.*)\.(gif|jpg|jpeg|png)$/
       tag_html
     end

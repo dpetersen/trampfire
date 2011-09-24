@@ -8,6 +8,8 @@ require_relative 'models/models'
 require_relative 'lib/libs'
 
 class GithubBotRequest < BotRequestBase
+  include CommitChatMessageHandler
+
   handle_bot_event("post_commit", PostCommitEventHandler)
 
   handle_bot_event("create_repository_watch") do
@@ -20,31 +22,11 @@ class GithubBotRequest < BotRequestBase
     RepositoryWatch.all.as_json.to_json
   end
 
-  # TODO rename this to something more apt, like process_user_initiated_message
-  def process
-    if message =~ /^http(?:s)?:\/\/(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)\/commit\/([a-f0-9]{40})$/
-      repository_owner = $1
-      repository_name = $2
-      sha = $3
-
-      within_subprocess do
-        view_hash = build_view_hash_for_commit(repository_owner, repository_name, sha)
-        html = render_view("commit", view_hash)
-
-        message_hash["data"] = html
-        interprocess_message = UserInitiatedInterprocessMessage.new(message_hash: message_hash)
-        asynchronous_pipe.write interprocess_message.to_json
-      end
-
-      octocatize_message(message)
-    end
+  def process_user_initiated_message
+    process_for_github_commit_links
   end
 
 protected
-
-  def octocatize_message(message)
-    %{<a href="#{message}"><img src="#{public_asset_path("/images/octocat.png")}" width="50" height="50" />#{message}</a>}
-  end
 
   def build_view_hash_for_commit(repository_owner, repository_name, sha)
     api =  GithubApiHelper.new(config["username"], config["api_key"])

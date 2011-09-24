@@ -10,7 +10,7 @@ protected
   end
 
   def process_in_request_class(message_hash)
-    modified_message = new_bot_request_instance(message_hash).process
+    modified_message = new_bot_request_instance(message_hash).process_user_initiated_message
 
     if modified_message != nil && modified_message != message_hash["data"]
       message_hash["data"] = modified_message
