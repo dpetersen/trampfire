@@ -4,18 +4,21 @@ require 'json'
 require File.join(PATHS::SOCKET_SERVER::LIB, 'interprocess_message')
 
 require_relative 'config'
+require_relative 'periodic_execution'
+require_relative 'handlers/user_initiated_message'
+require_relative 'handlers/bot_initiated_message'
+
 require_relative 'pipe_connector'
 require_relative 'subprocessor'
 
 class BotBase
   include Config
+  include PeriodicExecution
   include PipeConnector
   include Subprocessor
 
-  def self.periodically(seconds, &block)
-    @periodic_tasks ||= []
-    @periodic_tasks << [seconds, block]
-  end
+  include UserInitiatedMessageHandler
+  include BotInitiatedMessageHandler
 
   def initialize
     connect_asyncronous_pipe
@@ -25,23 +28,6 @@ class BotBase
   end
 
 protected
-
-  def fork_periodic_tasks
-    return unless periodic_tasks
-
-    periodic_tasks.each do |seconds, task_block|
-      within_subprocess do
-        loop do
-          instance_eval &task_block
-          sleep seconds
-        end
-      end
-    end
-  end
-
-  def periodic_tasks
-    self.class.instance_variable_get(:"@periodic_tasks")
-  end
 
   def connect_incoming_pipe
     path = "incoming"
@@ -78,43 +64,6 @@ protected
     end
 
     wait_for_incoming
-  end
-
-  def handle_user_initiated_message(interprocess_message)
-    message_hash = process(interprocess_message.message)
-    interprocess_message = UserInitiatedInterprocessMessage.new(message_hash: message_hash)
-
-    connect_outgoing_pipe
-    @outgoing_pipe.puts interprocess_message.to_json
-    @outgoing_pipe.flush
-  end
-
-  def handle_bot_initiated_message(interprocess_message)
-    event_name = interprocess_message.event_name
-    bot_name = interprocess_message.bot_name
-    raise "Got a bot-initiated message that wasn't addressed to me!" unless bot_name == self.class.to_s
-
-    bot_request = new_bot_request_instance(interprocess_message.message)
-    handler = bot_request_class.handler_for_event(event_name)
-    raise "I have no handler for the event: '#{event_name}'" unless handler
-
-    handler_response = bot_request.instance_eval &handler
-
-    if interprocess_message.response_pipe_path
-      response_pipe = connect_named_pipe(interprocess_message.response_pipe_path)
-      response_pipe.puts handler_response
-      response_pipe.flush
-    end
-  end
-
-  def process(message_hash)
-    modified_message = new_bot_request_instance(message_hash).process
-
-    if modified_message != nil && modified_message != message_hash["data"]
-      message_hash["data"] = modified_message
-    end
-
-    message_hash
   end
 
   def bot_request_class
