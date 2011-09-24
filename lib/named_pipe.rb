@@ -21,6 +21,10 @@ class NamedPipe
     self.for_reading(new_anonymous_pipe_path)
   end
 
+  def self.message_factory_pipe
+    path = File.join(PATHS::SOCKET_SERVER::BASE, 'message_factory_incoming_pipe')
+    NamedPipe.for_writing(path)
+  end
 
   attr_reader :path
 

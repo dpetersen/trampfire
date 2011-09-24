@@ -105,9 +105,6 @@ class GithubBot < BotBase
 
     api = GithubApiHelper.new(config["username"], config["api_key"])
     pull_requests = PullRequestChecker.new(api).new_pull_requests
-    puts pull_requests.inspect
-
-    response_pipe = NamedPipe.anonymous_for_writing
 
     pull_requests.keys.each do |tag_name|
       html = ""
@@ -122,20 +119,8 @@ class GithubBot < BotBase
         html << "<br />"
       end
 
-      message_creation_interprocess_message = MessageFactoryInterprocessMessage.new(
-        response_pipe.path,
-        message_hash: {
-          tag_name: tag_name,
-          original_message: html,
-          bot: "GithubBot"
-        }
-      )
+      message_object = MessageFromFactory.new(tag_name, "GithubBot", html).message
 
-      message_factory_pipe.write message_creation_interprocess_message.to_json
-
-      message_string = response_pipe.read
-
-      message_object = JSON.parse(message_string)
       interprocess_message = BotInitiatedInterprocessMessage.new(
         "GitHubBot",
         "pull_requests",

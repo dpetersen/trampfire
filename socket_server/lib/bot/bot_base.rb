@@ -45,13 +45,6 @@ protected
     @incoming_pipe = NamedPipe.for_reading(path)
   end
 
-  def message_factory_pipe
-    return @message_factory_pipe if @message_factory_pipe
-
-    path = File.join(PATHS::SOCKET_SERVER::BASE, 'message_factory_incoming_pipe')
-    @message_factory_pipe = NamedPipe.for_writing(path)
-  end
-
   def wait_for_incoming
     puts "Waiting"
 
