@@ -16,11 +16,11 @@
     <div class="authorship">
       <img src="<%= commit.author_gravatar_url %>" width="24" height="24" />
       <span class="author-name">
-        <%- if commit.authored_by_github_user? %>
+        <% if commit.authored_by_github_user? %>
           <a href="<%= commit.author_profile_path %>"><%= commit.author_name %></a>
-        <%- else %>
+        <% else %>
           <%= commit.author_name %>
-        <%- end %>
+        <% end %>
       </span>
       authored
     </div>

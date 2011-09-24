@@ -23,6 +23,7 @@ GEM
       eventmachine (>= 0.12.9)
     erubis (2.7.0)
     eventmachine (0.12.10)
+    haml (3.1.3)
     i18n (0.6.0)
     json (1.6.1)
     method_source (0.6.5)
@@ -38,6 +39,7 @@ GEM
       sexp_processor (~> 3.0)
     sexp_processor (3.0.6)
     slop (2.1.0)
+    tilt (1.3.3)
     tzinfo (0.3.29)
 
 PLATFORMS
@@ -48,6 +50,8 @@ DEPENDENCIES
   activesupport
   em-websocket
   erubis
+  haml
   json
   mysql2
   pry
+  tilt

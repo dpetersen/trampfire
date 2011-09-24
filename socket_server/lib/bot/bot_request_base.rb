@@ -1,5 +1,3 @@
-require 'erubis'
-
 require_relative 'subprocessor'
 
 class BotRequestBase
