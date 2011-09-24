@@ -6,7 +6,7 @@ class MessageFromFactory
   end
 
   def message
-    NamedPipe.message_factory_pipe.write(@interprocess_message.to_json)
+    @interprocess_message.send_to_message_factory_pipe
     message_string = @response_pipe.read
 
     JSON.parse(message_string)
