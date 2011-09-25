@@ -6,3 +6,4 @@
 //= require vendor/underscore
 //= require vendor/backbone
 //= require vendor/bootstrap-modal
+//= require vendor/bootstrap-dropdown
