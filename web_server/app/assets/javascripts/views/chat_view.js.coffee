@@ -41,7 +41,7 @@ class Trampfire.ChatView extends Backbone.View
     @$(".control-wrapper").removeClass("error")
 
   activeTagChanged: (tag) ->
-    @activeTagName = tag
+    @activeTagName = tag.get("name")
     @updateActiveTagLabel()
 
   updateActiveTagLabel: ->

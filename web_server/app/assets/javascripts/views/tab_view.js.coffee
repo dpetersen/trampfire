@@ -1,6 +1,7 @@
 class Trampfire.TabView extends Backbone.View
   events:
     "click a": "clicked"
+    "click ul.dropdown-menu a": "tagClicked"
 
   initialize: (tab, tabBarView, domId = null) ->
     @tab = tab
@@ -42,3 +43,8 @@ class Trampfire.TabView extends Backbone.View
   clicked: (event) ->
     event.preventDefault()
     @trigger("clicked", this)
+
+  tagClicked: (event) ->
+    event.preventDefault()
+    id = $(event.currentTarget).data("tag-id")
+    @trigger("tag:clicked", id)

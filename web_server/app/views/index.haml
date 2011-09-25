@@ -20,13 +20,6 @@
     %input.small{ type: 'text', name: 'tag[name]' }
     %input.btn.primary{ type: 'submit', value: "Create Tag" }
 
-  #tags.well
-    %h3 Tags
-    %ul#tags.pills
-      - Tag.all.each do |tag|
-        %li
-          %a{ href: "#" }= tag.name
-
   #roster.well
     %h3 Roster
     %ul.unstyled

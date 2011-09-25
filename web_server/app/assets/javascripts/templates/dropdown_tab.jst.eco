@@ -3,7 +3,7 @@
   <ul class="dropdown-menu">
     <% for tag in @tags: %>
       <li>
-        <a href="#"><%= tag.get("name") %></a>
+        <a data-tag-id="<%= tag.id %>" href="#"><%= tag.get("name") %></a>
       </li>
     <% end %>
   </ul>

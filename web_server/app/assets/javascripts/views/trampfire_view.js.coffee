@@ -5,7 +5,6 @@ class Trampfire.TrampfireView extends Backbone.View
     @roster = new Trampfire.Roster
     @transcriptView = new Trampfire.TranscriptView
     @chatView = new Trampfire.ChatView
-    @tagsView = new Trampfire.TagsView
     @rosterView = new Trampfire.RosterView
     @tabBarView = new Trampfire.TabBarView
 
@@ -26,12 +25,10 @@ class Trampfire.TrampfireView extends Backbone.View
     @socketConnection.bind("socket:message:roster", @updateRoster, this)
 
   bindUIEvents: ->
-    @tagsView.bind("tags:selectedChanged", @chatView.activeTagChanged, @chatView)
     @chatView.bind("chat:newMessage", @socketConnection.sendMessage, @socketConnection)
     @roster.bind("reset", @rosterView.updateRoster, @rosterView)
     @tabBarView.bind("tab:changed", @tabChanged, this)
-
-    @tagsView.notifyTagChange() # Event is fired before anybody is listening
+    @tabBarView.bind("tag:changed", @chatView.activeTagChanged, @chatView)
 
   serverReady: ->
     @chatView.enable()

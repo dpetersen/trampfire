@@ -45,6 +45,7 @@ class Trampfire.TabBarView extends Backbone.View
   addNewTab: (tab) ->
     tabView = new Trampfire.TabView(tab, this)
     tabView.bind("clicked", @tabClicked, this)
+    tabView.bind("tag:clicked", @tagClicked, this)
     @tabViews.push(tabView)
     tabView.render()
 
@@ -56,6 +57,10 @@ class Trampfire.TabBarView extends Backbone.View
   tabClicked: (tabView) ->
     @activateTab(tabView)
     @trigger("tab:changed", tabView.tab)
+
+  tagClicked: (tabId) ->
+    tag = @tagList.get(tabId)
+    @trigger("tag:changed", tag)
 
   createNewTabModalView: ->
     tabModalView = new Trampfire.TabModalView(this)
