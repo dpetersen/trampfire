@@ -20,25 +20,24 @@ class Trampfire.TabView extends Backbone.View
     @el.removeClass("active")
     @el.removeAttr("data-dropdown")
 
-  # TODO: Need to just do a conditional and have two templates
   render: ->
-    @el = $("<li><a href='#'>#{ @label }</a></li>")
-    @el.attr("id", @domId) if @domId
-    @addDropdownMarkup() unless @isSystemTab()
+    html = 
+      if @isSystemTab() then @htmlForSystemTab()
+      else @htmlForDropdownTab()
 
-    @delegateEvents()
+    @el = $(html)
     @tabBar.append(@el)
+    @delegateEvents()
+
+  htmlForSystemTab: ->
+    JST["templates/basic_tab"](domId: @domId, label: @label)
+
+  htmlForDropdownTab: ->
+    tags = @tab.get("tagList").models
+    JST["templates/dropdown_tab"](domId: @domId, label: @label, tags: tags)
 
   isSystemTab: ->
     @domId == "add-tab" || @domId == "firehose"
-
-  addDropdownMarkup: ->
-    @el.addClass("dropdown")
-    @$("a").addClass("dropdown-toggle")
-    dropdownList = $("<ul class='dropdown-menu'></ul>").appendTo(@el)
-
-    _.each @tab.get("tagList").models, (tag) =>
-      dropdownList.append($("<li><a href='#'>#{ tag.get("name") }</a></li>"))
 
   clicked: (event) ->
     event.preventDefault()

@@ -1,0 +1,10 @@
+<li id="<%= @domId %>" class="dropdown">
+  <a href="#" class="dropdown-toggle"><%= @label %></a>
+  <ul class="dropdown-menu">
+    <% for tag in @tags: %>
+      <li>
+        <a href="#"><%= tag.get("name") %></a>
+      </li>
+    <% end %>
+  </ul>
+</li>

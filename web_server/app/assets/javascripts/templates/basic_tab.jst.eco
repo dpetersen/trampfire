@@ -1,0 +1,3 @@
+<li id="<%= @domId %>">
+  <a href="#"><%= @label %></a>
+</li>
