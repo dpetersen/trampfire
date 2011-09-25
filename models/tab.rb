@@ -1,6 +1,6 @@
 class Tab < ActiveRecord::Base
   belongs_to :user
-  has_many :tag_assignments, dependent: destroy
+  has_many :tag_assignments, dependent: :destroy
   has_many :tags, through: :tag_assignments
 
   validates :name, :user, presence: true
