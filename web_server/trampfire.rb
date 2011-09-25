@@ -23,8 +23,6 @@ class TrampfireApp < Sinatra::Base
   end
 
   post '/tabs' do
-    Tab.destroy_all
-
     attributes = JSON.parse(request.body.read)
     tab = Tab.create_from_json_for_user(env['warden'].user, attributes)
     if tab.persisted? then tab.as_json.to_json
