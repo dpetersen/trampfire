@@ -36,10 +36,10 @@ class TrampfireApp < Sinatra::Base
     raise "UPDATE GOT PARAMS: #{params.inspect}"
   end
 
-  # post '/tags' do
-  #   when_authenticated do
-  #     Tag.create(params[:tag])
-  #     redirect '/'
-  #   end
-  # end
+  post '/tags' do
+    when_authenticated do
+      Tag.create(params[:tag])
+      redirect '/'
+    end
+  end
 end
