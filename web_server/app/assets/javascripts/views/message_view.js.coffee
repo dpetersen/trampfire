@@ -15,6 +15,13 @@ class Trampfire.MessageView extends Backbone.View
     messageHTML = JST["templates/message"](id: id, author: author, text: text)
     @transcript.append(messageHTML)
     @el = @transcript.find("dl[data-id='#{id}']")
+    @hide()
+
+  hide: ->
+    @el.hide()
+
+  show: ->
+    @el.show()
 
   messageUpdated: (message) ->
     @updateHTML(message.get("data"))

@@ -7,6 +7,7 @@ class Trampfire.TrampfireView extends Backbone.View
     @chatView = new Trampfire.ChatView
     @tagsView = new Trampfire.TagsView
     @rosterView = new Trampfire.RosterView
+    @tabBarView = new Trampfire.TabBarView
 
     # We're big on security around here.  Wait a minute...
     email = $("body").data("email")
@@ -14,6 +15,8 @@ class Trampfire.TrampfireView extends Backbone.View
 
     @bindNetworkEvents()
     @bindUIEvents()
+
+    @tabBarView.setInitialTab()
 
   bindNetworkEvents: ->
     @socketConnection.bind("socket:connected", @serverReady, this)
@@ -26,6 +29,7 @@ class Trampfire.TrampfireView extends Backbone.View
     @tagsView.bind("tags:selectedChanged", @chatView.activeTagChanged, @chatView)
     @chatView.bind("chat:newMessage", @socketConnection.sendMessage, @socketConnection)
     @roster.bind("reset", @rosterView.updateRoster, @rosterView)
+    @tabBarView.bind("tab:changed", @tabChanged, this)
 
     @tagsView.notifyTagChange() # Event is fired before anybody is listening
 
@@ -34,3 +38,7 @@ class Trampfire.TrampfireView extends Backbone.View
 
   updateRoster: (roster) ->
     @roster.reset(roster.models)
+
+  tabChanged: (tab) ->
+    messageFilter = new Trampfire.MessageFilter(tab.get("tagList"))
+    @transcriptView.setMessageFilter(messageFilter)

@@ -17,14 +17,29 @@ class TrampfireApp < Sinatra::Base
   get '/' do
     when_authenticated do
       @messages = Message.order("updated_at DESC").limit(5).all.reverse
+      @tags = Tag.order("name").all
       haml :index, layout: :application
     end
   end
 
-  post '/tags' do
-    when_authenticated do
-      Tag.create(params[:tag])
-      redirect '/'
+  post '/tabs' do
+    Tab.destroy_all
+
+    attributes = JSON.parse(request.body.read)
+    tab = Tab.create_from_json_for_user(env['warden'].user, attributes)
+    if tab.persisted? then tab.as_json.to_json
+    else 422
     end
   end
+
+  put '/tabs/:id/' do
+    raise "UPDATE GOT PARAMS: #{params.inspect}"
+  end
+
+  # post '/tags' do
+  #   when_authenticated do
+  #     Tag.create(params[:tag])
+  #     redirect '/'
+  #   end
+  # end
 end

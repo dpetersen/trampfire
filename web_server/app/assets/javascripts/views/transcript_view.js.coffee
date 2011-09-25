@@ -1,5 +1,6 @@
 class Trampfire.TranscriptView extends Backbone.View
   el: "#transcript"
+  nonSystemMessageViews: []
 
   initialize: ->
     $(@el).resize => @autoscroll()
@@ -21,7 +22,11 @@ class Trampfire.TranscriptView extends Backbone.View
 
   messageAdded: (message) ->
     messageView = new Trampfire.MessageView(message: message, transcriptView: this)
+    @nonSystemMessageViews.push(messageView)
     messageView.render()
+
+    if @currentMessageFilter && @currentMessageFilter.shouldBeVisible(messageView.message)
+      messageView.show()
 
     @autoscroll()
 
@@ -31,3 +36,11 @@ class Trampfire.TranscriptView extends Backbone.View
 
   autoscroll: ->
     $("body").scrollTop($(document).height())
+
+  setMessageFilter: (messageFilter) ->
+    @currentMessageFilter = messageFilter
+    _.each @nonSystemMessageViews, (messageView) =>
+      if @currentMessageFilter.shouldBeVisible(messageView.message)
+        messageView.show()
+      else
+        messageView.hide()

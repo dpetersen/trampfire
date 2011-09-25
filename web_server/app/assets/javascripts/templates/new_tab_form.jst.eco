@@ -1,0 +1,24 @@
+<form>
+  <fieldset>
+    <legend>New Tab</legend>
+
+    <div class="clearfix">
+      <label for="name">Name</label>
+      <div class="input">
+        <input class="large" name="name" type="text"></input>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <label for="tags">Tags</label>
+      <div class="input">
+        <select class="large" name="tags" multiple="multiple">
+          <% for tag in @tags: %>
+            <option value="<%= tag.id %>"><%= tag.get("name") %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+
+  </fieldset>
+</form>

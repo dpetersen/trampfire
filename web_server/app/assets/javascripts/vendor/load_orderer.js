@@ -5,3 +5,4 @@
 //= require vendor/jquery.ba-resize
 //= require vendor/underscore
 //= require vendor/backbone
+//= require vendor/bootstrap-modal

@@ -40,11 +40,18 @@ ul.tabs {
   margin-top: 40px;
 }
 
+#add-tab a {
+  font-weight: bold;
+  font-size: 150%;
+  background: #57A957;
+}
+
 #transcript-wrapper {
   overflow: hidden;
 }
 
 #transcript {
+  margin-top: 70px;
   padding-bottom: 60px;
 }
 

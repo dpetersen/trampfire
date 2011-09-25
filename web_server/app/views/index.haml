@@ -1,10 +1,11 @@
 #left-main
-  %ul.tabs
-    %li.active
-      %a{ href: "#" } Firehose
+  %ul#tab-bar.tabs{ data: { tags: @tags.as_json.to_json }}
+    - env['warden'].user.tabs.each do |tab|
+      %li{ data: { tab: tab.as_json(include: :tags).to_json } }
+        %a{ href: "#" }= tab.name
 
   #transcript-wrapper.well
-    #transcript{ data: { messages: @messages.to_json } }
+    #transcript{ data: { messages: @messages.as_json.to_json } }
 
   #chat
     %form
