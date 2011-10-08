@@ -11,7 +11,8 @@ module ActivityHookHandler
         "activity_hook",
         {
           description: activity_xml.at_css("activity description").text,
-          tracker_logo_path: public_asset_path("/images/tracker_logo.png")
+          tracker_logo_path: public_asset_path("/images/tracker_logo.png"),
+          story_id: activity_xml.at_css("activity stories story id").text
         }
       )
 
