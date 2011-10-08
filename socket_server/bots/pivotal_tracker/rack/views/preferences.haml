@@ -1,0 +1,14 @@
+%h3 Current projects:
+%ul
+  - @projects.each do |project|
+    %li Repository: #{project["project_id"]}, Tag: #{project["destination_tag_name"]}
+
+%form{ action: "/bots/pivotal_tracker/preferences/projects", method: "post" }
+
+  %label Project ID
+  %input.medium{ type: "text", name: "project[project_id]" }
+
+  %label Tag
+  %input.medium{ type: "text", name: "project[destination_tag_name]" }
+
+  %input.btn.primary{ type: 'submit', value: "Save Project" }
