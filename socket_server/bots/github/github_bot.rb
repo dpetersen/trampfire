@@ -42,11 +42,7 @@ class GithubBot < BotBase
     super
   end
 
-  periodically(60) do
-    # TODO don't forget to nuke this before commit...
-    sleep 5
-    PullRequest.destroy_all
-
+  periodically(60 * 5) do
     api = GithubApiHelper.new(config["username"], config["api_key"])
     PullRequestNotifier.new(api)
   end
