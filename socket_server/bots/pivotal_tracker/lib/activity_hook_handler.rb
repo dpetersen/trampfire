@@ -5,15 +5,20 @@ module ActivityHookHandler
     activity_xml = Nokogiri::XML(message_hash)
 
     project_id = activity_xml.at_css("activity project_id").text
-    description = activity_xml.at_css("activity description").text
 
     if project = Project.where(project_id: project_id).first
-      message_html = "<em>#{description}</em>"
+      html = render_view(
+        "activity_hook",
+        {
+          description: activity_xml.at_css("activity description").text,
+          tracker_logo_path: public_asset_path("/images/tracker_logo.png")
+        }
+      )
 
       message_object = MessageFromFactory.new(
         project.destination_tag_name,
         "PivotalTrackerBot",
-        message_html
+        html
       ).message
 
       BotInitiatedInterprocessMessage.new(
