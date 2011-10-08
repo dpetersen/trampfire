@@ -2,13 +2,13 @@ New Pull Request:
 
 .github-bot-pull-request
   %h3
-    %a{ href: url }= title
+    %a{ href: url, target: "_blank" }= title
   %p
-    %a{ href: url }= body
+    %a{ href: url, target: "_blank" }= body
   .meta
-    %a.gravatar{ href: pull_requestor_url }
+    %a.gravatar{ href: pull_requestor_url, target: "_blank" }
       %img{ src: pull_requestor_gravatar_url, width: 12, height: 12 }
-    %a{ href: pull_requestor_url }= pull_requestor
+    %a{ href: pull_requestor_url, target: "_blank" }= pull_requestor
     submitted to
-    %a{ href: repository_url }= repository_display_name
+    %a{ href: repository_url, target: "_blank" }= repository_display_name
   &nbsp;
