@@ -30,6 +30,7 @@ GEM
       ruby_parser (>= 2.0.5)
     multi_json (1.0.3)
     mysql2 (0.3.7)
+    nokogiri (1.4.7)
     pry (0.9.5)
       coderay (>= 0.9.8)
       method_source (>= 0.6.5)
@@ -53,5 +54,6 @@ DEPENDENCIES
   haml
   json
   mysql2
+  nokogiri
   pry
   tilt

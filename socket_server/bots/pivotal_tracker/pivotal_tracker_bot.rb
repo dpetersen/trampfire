@@ -2,7 +2,7 @@ require_relative '../../../lib/shared'
 require File.join(PATHS::SOCKET_SERVER::BOT_LIB, 'bot_essentials')
 
 require_relative 'models/models'
-# require_relative 'lib/libs'
+require_relative 'lib/libs'
 
 class PivotalTrackerBotRequest < BotRequestBase
 
@@ -15,6 +15,8 @@ class PivotalTrackerBotRequest < BotRequestBase
     project = Project.create(project_attributes)
     project.as_json(methods: :errors).to_json
   end
+
+  handle_bot_event("activity_hook", ActivityHookHandler)
 
   def process_user_initiated_message
     # TODO: Nothing to do here, should make this an optional method
