@@ -2,6 +2,8 @@ require 'json'
 require 'haml'
 require 'sinatra'
 
+require File.join(PATHS::SOCKET_SERVER::LIB, 'interprocess_message')
+
 module GithubBot
   module Rack
     class Preferences < Sinatra::Base
