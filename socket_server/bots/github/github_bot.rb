@@ -8,15 +8,16 @@ class GithubBotRequest < BotRequestBase
   include CommitChatMessageHandler
 
   handle_bot_event("post_commit", PostCommitEventHandler)
+  handle_bot_event("fetch_repository_watch_for_post_commit", RepositoryWatchForPostCommitHandler)
+
+  handle_bot_event("fetch_repository_watches") do
+    RepositoryWatch.all.as_json.to_json
+  end
 
   handle_bot_event("create_repository_watch") do
     repository_watch_attributes = JSON.parse(message_hash)
     repository_watch = RepositoryWatch.create(repository_watch_attributes)
     repository_watch.as_json(methods: :errors).to_json
-  end
-
-  handle_bot_event("fetch_repository_watches") do
-    RepositoryWatch.all.as_json.to_json
   end
 
   def process_user_initiated_message
