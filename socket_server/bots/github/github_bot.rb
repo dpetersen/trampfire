@@ -8,7 +8,6 @@ class GithubBotRequest < BotRequestBase
   include CommitChatMessageHandler
 
   handle_bot_event("post_commit", PostCommitEventHandler)
-  handle_bot_event("fetch_repository_watch_for_post_commit", RepositoryWatchForPostCommitHandler)
 
   handle_bot_event("fetch_repository_watches") do
     RepositoryWatch.all.as_json.to_json

@@ -1,5 +1,4 @@
 require_relative 'github_api_helper'
 require_relative 'pull_request_notifier'
 require_relative 'post_commit_event_handler'
-require_relative 'repository_watch_for_post_commit_handler'
 require_relative 'commit_chat_message_handler'
