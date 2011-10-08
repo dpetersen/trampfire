@@ -11,7 +11,7 @@ module PivotalTrackerBot
         BotInitiatedInterprocessMessage.new(
           "pivotal_tracker",
           "activity_hook",
-          message_hash: params[:body]
+          message_hash: request.body.read
         ).send_to_bot
 
         "Success..." # I guess, if it gets here.
