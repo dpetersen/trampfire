@@ -1,7 +1,7 @@
 %h3 Current projects:
 %ul
   - @projects.each do |project|
-    %li Clone URL: #{project["clone_url"]}, Heroku App Name: #{project["heroku_app_name"]}
+    %li Clone URL: #{project["clone_url"]}, Heroku App Name: #{project["heroku_app_name"]}, Tag: #{project["destination_tag_name"]}
 
 %form{ action: "/bots/deployment/preferences/projects", method: "post" }
 
@@ -10,5 +10,8 @@
 
   %label Heroku App Name
   %input.medium{ type: "text", name: "project[heroku_app_name]" }
+
+  %label Destination Tag
+  %input.medium{ type: "text", name: "project[destination_tag_name]" }
 
   %input.btn.primary{ type: 'submit', value: "Save Project" }

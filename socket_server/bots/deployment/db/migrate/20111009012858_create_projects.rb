@@ -3,6 +3,7 @@ class CreateProjects < ActiveRecord::Migration
     create_table :projects do |t|
       t.string :clone_url
       t.string :heroku_app_name
+      t.string :destination_tag_name
     end
   end
 
