@@ -1,0 +1,11 @@
+/*
+So, why does this exist?  Well:
+- Can't require_tree from the web_app, because it will load up
+  stylesheets everywhere, not just in assets.  In the deployment bot,
+  that means stylesheets from checked out projects.
+- Can't use globs in any of this, so can't be specific.
+- No symlink following, no ERB.
+
+= require_tree ../github/assets
+= require_tree ../pivotal_tracker/assets
+*/

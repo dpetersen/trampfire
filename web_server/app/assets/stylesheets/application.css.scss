@@ -1,12 +1,9 @@
-// This won't follow symlinks, so it gets the stylesheets for inactive bots, too.
-// You can evaluate ERB later, but only calling require_asset directly. No require_tree.
-// If you give it one of the PATH constants, it says require_tree must be relative.
-// Meh.  I tried.
-//= require_tree ../../../../socket_server/bots
+//= require_tree ../../../../socket_server/bots/asset_manifest
 //
 //= require vendor/load_orderer
 
 @import "semantic_grid";
+//= require ../../../../socket_server/bots/bots
 
 #navigation {
   @include col(24);
