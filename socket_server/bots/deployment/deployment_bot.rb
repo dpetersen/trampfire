@@ -5,6 +5,8 @@ require_relative 'models/models'
 require_relative 'lib/libs'
 
 class DeploymentBotRequest < BotRequestBase
+  include DeploymentRequestHandler
+
   handle_bot_event("fetch_projects") do
     Project.all.as_json.to_json
   end
@@ -23,7 +25,7 @@ class DeploymentBotRequest < BotRequestBase
   end
 
   def process_user_initiated_message
-    # TODO: Nothing to do here, should make this an optional method
+    process_for_deployment_request
   end
 end
 

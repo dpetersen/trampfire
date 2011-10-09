@@ -15,7 +15,7 @@ module ProjectPreparer
     ).send_to_asynchronous_pipe
 
     output = `cd #{DeploymentBot::REPO_STORAGE_PATH} && git clone #{project.clone_url} #{project.id} --progress 2>&1`
-    output += `cd #{DeploymentBot::REPO_STORAGE_PATH}/#{project.id} && git remote add heroku git@heroku.com:#{project.heroku_app_name}.git`
+    output += `cd #{project.path} && git remote add heroku git@heroku.com:#{project.heroku_app_name}.git`
 
     html = "Project '#{project.heroku_app_name}' imported:"
     html << "<pre>#{output}</pre>"
