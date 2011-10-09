@@ -8,4 +8,5 @@ So, why does this exist?  Well:
 
 = require_tree ../github/assets
 = require_tree ../pivotal_tracker/assets
+= require_tree ../deployment/assets
 */

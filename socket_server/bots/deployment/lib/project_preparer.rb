@@ -1,11 +1,9 @@
 module ProjectPreparer
-  def self.prepare(project)
-    html = "Preparing to onboard new project '#{project.heroku_app_name}'"
-
+  def prepare(project)
     message_object = MessageFromFactory.new(
       project.destination_tag_name,
       "DeploymentBot",
-      html
+      render_view("onboarding", name: project.heroku_app_name)
     ).message
 
     BotInitiatedInterprocessMessage.new(
@@ -17,10 +15,7 @@ module ProjectPreparer
     output = `cd #{DeploymentBot::REPO_STORAGE_PATH} && git clone #{project.clone_url} #{project.id} --progress 2>&1`
     output += `cd #{project.path} && git remote add heroku git@heroku.com:#{project.heroku_app_name}.git`
 
-    html = "Project '#{project.heroku_app_name}' imported:"
-    html << "<pre>#{output}</pre>"
-    message_object["data"] = html
-
+    message_object["data"] = render_view("onboarded", name: project.heroku_app_name, output: output)
     UserInitiatedInterprocessMessage.new(message_hash: message_object).send_to_asynchronous_pipe
   end
 end

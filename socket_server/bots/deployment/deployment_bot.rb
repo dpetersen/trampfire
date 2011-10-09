@@ -6,18 +6,21 @@ require_relative 'lib/libs'
 
 class DeploymentBotRequest < BotRequestBase
   include DeploymentRequestHandler
+  include ProjectPreparer
 
   handle_bot_event("fetch_projects") do
     Project.all.as_json.to_json
   end
 
   handle_bot_event("create_project") do
+    Project.destroy_all
+
     project_attributes = JSON.parse(message_hash)
     project = Project.create(project_attributes)
 
     if project.persisted?
       within_subprocess do
-        ProjectPreparer.prepare(project)
+        prepare(project)
       end
     end
 

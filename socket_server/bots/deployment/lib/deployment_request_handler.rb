@@ -26,15 +26,14 @@ protected
 
     output = `cd #{project.path} && git pull origin master && git push heroku master 2>&1`
 
-    send_deployment_finished_message(output)
+    send_deployment_finished_message(project, output)
   end
 
   def send_deployment_starting_message(project)
-    html = "Preparing to deploy '#{project.heroku_app_name}'"
     message_object = MessageFromFactory.new(
       "Trampfire",
       "DeploymentBot",
-      html
+      render_view("preparing", name: project.heroku_app_name)
     ).message
 
     BotInitiatedInterprocessMessage.new(
@@ -44,12 +43,11 @@ protected
     ).send_to_asynchronous_pipe
   end
 
-  def send_deployment_finished_message(output)
-    html = "Pushed app<pre>#{output}</pre>"
+  def send_deployment_finished_message(project, output)
     message_object = MessageFromFactory.new(
       "Trampfire",
       "DeploymentBot",
-      html
+      render_view("finished", output: output, name: project.heroku_app_name)
     ).message
 
     BotInitiatedInterprocessMessage.new(
@@ -60,11 +58,10 @@ protected
   end
 
   def response_for_unknown_project(requested_name)
-    html = "Sorry, I don't know about project '#{requested_name}'."
     message_object = MessageFromFactory.new(
       "Trampfire",
       "DeploymentBot",
-      html
+      render_view("unknown", requested_name: requested_name)
     ).message
 
     BotInitiatedInterprocessMessage.new(
