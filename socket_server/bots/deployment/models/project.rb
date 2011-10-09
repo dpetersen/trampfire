@@ -3,6 +3,6 @@ class Project < ActiveRecord::Base
   validates :clone_url, :heroku_app_name, presence: true, uniqueness: true
 
   def path
-    File.join(DeploymentBot::REPO_STORAGE_PATH, self.id)
+    File.join(DeploymentBot::REPO_STORAGE_PATH, self.id.to_s)
   end
 end
